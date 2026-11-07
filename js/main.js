@@ -317,7 +317,7 @@ function boot() {
       try {
         const r = await fetch('https://api.web3forms.com/submit', {
           method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ access_key: key, subject: `Website request: ${data.name}`, from_name: 'Axioma', ...data }),
+          body: JSON.stringify({ access_key: key, subject: `Website request: ${data.name}`, from_name: 'Axioma', ...data, message: form.elements.message.value.trim() || '—' }),
         });
         if (!r.ok || !(await r.json()).success) throw 0;
       } catch {
@@ -341,7 +341,7 @@ function boot() {
   const fit = now => {
     const w = Math.round(innerWidth * scale), h = Math.round(innerHeight * scale), r = post.c.uRes.value;
     if (!w || !h || now < nextFit) return;
-    if (document.activeElement?.tagName === 'INPUT') return;
+    if (/INPUT|TEXTAREA/.test(document.activeElement?.tagName || '')) return;
     if (r.x !== w || Math.abs(r.y - h) > r.y * .25 || (!mobile && r.y !== h)) { nextFit = now + 150; size(); }
   };
 

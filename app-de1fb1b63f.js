@@ -114,7 +114,7 @@ const DICT = {
     worldK: 'Adaptive', worldH: 'One site, any shape.', worldT: 'It reshapes itself for a phone, a tablet or a desktop. The form changes, the quality stays.',
     moonK: 'Support', moonH: 'We stay after launch.', moonT: 'Silence after launch\nmeans everything just works.',
     endK: 'Axioma',
-    formH: 'Your website request', name: 'Name', phone: 'Phone', email: 'Email', send: 'Send request',
+    formH: 'Your website request', name: 'Name', phone: 'Phone', email: 'Email', wish: 'Wishes for your site (optional)', send: 'Send request',
     errName: 'Enter your name', errPhone: 'Enter a valid phone number', errEmail: 'Enter a valid email', errSend: 'Something went wrong. Please try again.',
     after: 'Request sent. We’ll be in touch, {name}.', foot: 'Every scene and every note is generated in real time',
     tagA: 'Speed', tagAs: 'Pages load without the wait', tagB: 'Adaptive', tagBs: 'Phone, tablet, desktop', tagC: 'SEO', tagCs: 'Search brings clients to you', tagH: 'Your website', tagHs: 'One in a billion',
@@ -133,7 +133,7 @@ const DICT = {
     worldK: 'Адаптивность', worldH: 'Один сайт, любая форма.', worldT: 'Он подстраивается под телефон, планшет и компьютер. Форма меняется, качество остаётся.',
     moonK: 'Поддержка', moonH: 'Мы остаёмся и после запуска.', moonT: 'Тишина после запуска\nзначит, что всё работает.',
     endK: 'Axioma',
-    formH: 'Ваш запрос на создание сайта', name: 'Имя', phone: 'Телефон', email: 'Почта', send: 'Отправить запрос',
+    formH: 'Ваш запрос на создание сайта', name: 'Имя', phone: 'Телефон', email: 'Почта', wish: 'Пожелания к сайту (необязательно)', send: 'Отправить запрос',
     errName: 'Введите имя', errPhone: 'Введите корректный номер', errEmail: 'Введите корректную почту', errSend: 'Что-то пошло не так. Попробуйте ещё раз.',
     after: 'Запрос отправлен. Мы свяжемся с вами, {name}.', foot: 'Каждая сцена и каждая нота создаются в реальном времени',
     tagA: 'Скорость', tagAs: 'Страницы без ожидания', tagB: 'Адаптив', tagBs: 'Телефон, планшет, компьютер', tagC: 'SEO', tagCs: 'Клиенты находят вас в поиске', tagH: 'Ваш сайт', tagHs: 'Один на миллиард',
@@ -2098,7 +2098,7 @@ function boot() {
       try {
         const r = await fetch('https://api.web3forms.com/submit', {
           method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ access_key: key, subject: `Website request: ${data.name}`, from_name: 'Axioma', ...data }),
+          body: JSON.stringify({ access_key: key, subject: `Website request: ${data.name}`, from_name: 'Axioma', ...data, message: form.elements.message.value.trim() || '—' }),
         });
         if (!r.ok || !(await r.json()).success) throw 0;
       } catch {
@@ -2122,7 +2122,7 @@ function boot() {
   const fit = now => {
     const w = Math.round(innerWidth * scale), h = Math.round(innerHeight * scale), r = post.c.uRes.value;
     if (!w || !h || now < nextFit) return;
-    if (document.activeElement?.tagName === 'INPUT') return;
+    if (/INPUT|TEXTAREA/.test(document.activeElement?.tagName || '')) return;
     if (r.x !== w || Math.abs(r.y - h) > r.y * .25 || (!mobile && r.y !== h)) { nextFit = now + 150; size(); }
   };
 
