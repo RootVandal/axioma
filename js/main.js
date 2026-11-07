@@ -58,6 +58,7 @@ const BOOT = [
 ];
 
 function boot() {
+  try { if (top !== self) top.location.replace(location.href); } catch { /* a foreign frame: stay put */ }
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance', alpha: false });
@@ -317,7 +318,7 @@ function boot() {
       try {
         const r = await fetch('https://api.web3forms.com/submit', {
           method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({ access_key: key, subject: `Website request: ${data.name}`, from_name: 'Axioma', ...data, message: form.elements.message.value.trim() || '—' }),
+          body: JSON.stringify({ access_key: key, subject: `Website request: ${data.name.replace(/[^\p{L}\p{N} .'-]/gu, '').slice(0, 60)}`, from_name: 'Axioma', ...data, message: form.elements.message.value.trim() || '—' }),
         });
         if (!r.ok || !(await r.json()).success) throw 0;
       } catch {
@@ -423,7 +424,6 @@ function boot() {
     if (cine === 'done' && y < 2200) cine = 'idle';
     if (cine === 'play') {
       cineT += clamp(real, .001, .25);
-      if (window.__hold != null) cineT = window.__hold;
       scrollTo(0, lockY); y = TRIGGER;
       if (cineT >= DONE) { cine = 'done'; lock(false); y = REST; scrollTo(0, REST * vh() / 100); }
     }

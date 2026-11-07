@@ -63,6 +63,8 @@ body[data-tone=dark] .beat h2,body[data-tone=dark] .txt{text-shadow:0 0 22px rgb
 .field:nth-child(3){grid-column:3/5}
 .wish{grid-column:1/4}
 .field textarea{appearance:none;display:block;width:100%;height:58px;padding:2px 0 6px;background:none;border:0;border-bottom:1px solid rgba(242,244,247,.36);border-radius:0;color:var(--fg);font:300 16px/1.3 var(--sans);outline:0;resize:none;transition:border-color .2s}
+.field textarea{scrollbar-width:none}
+.field textarea::-webkit-scrollbar{display:none}
 .field textarea:focus{border-bottom-color:#f2f4f7}
 .field.bad input{border-bottom-color:#ff8f7a}
 .err{min-height:16px;margin-top:6px;font:400 11px/1.3 var(--mono);color:#ffb3a4}
