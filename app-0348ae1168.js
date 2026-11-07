@@ -102,41 +102,41 @@ vec3 sway(vec3 wp, float reach){
 /** Every word on the page, in both languages. */
 const DICT = {
   en: {
-    title: 'Axioma — what needs no proof', desc: 'Axioma builds websites like this one. Scroll through nine scenes generated live in your browser, then send your request.',
+    title: 'Axioma — websites people remember', desc: 'Axioma designs and builds websites people remember. Send your request and get a site made for your business.',
     backToStart: 'Axioma, back to start', music: 'Music', musicOn: 'Music on', language: 'Switch language', nudge: 'Scroll', loading: 'Loading',
-    heroSub: 'What needs no proof.',
-    orderK: 'Order', orderH: 'Even chaos follows a rule.', orderT: 'Three equations. One path that never repeats and never leaves its shape.',
-    shipK: 'Machine', shipH: 'What can be built, eventually will be.', shipT: 'AX-1. Forty metres of chrome, one tokamak and a crew that won’t be back for two hundred years.',
-    originK: 'Origin', originH: 'Everything that lives was written first.', originT: 'Four letters and three billion lines. Each copy unzips the last, and that has been enough for four billion years.',
-    energyK: 'Energy', energyH: 'Nothing shines for free.', energyT: 'Nine thousand panels close around one star. Only a thin line of its light gets out, and night never falls here again.',
-    holeK: 'Boundary', holeH: 'Past the horizon, proof runs out.', holeT: 'Light from the far side of the disc bends over the shadow. Time runs differently here, and the clocks agree.',
-    scaleK: 'Scale', scaleH: 'Two hundred billion suns.', scaleT: 'One slow rotation takes a quarter of a billion years. Somewhere on an outer arm, something small is still asking why.',
-    worldK: 'Continuity', worldH: 'Any world can be unwound.', worldT: 'Oceans, mountains and clouds become a single ribbon. The shape changes. The connection stays.',
-    moonK: 'Silence', moonH: 'The far side has no signal.', moonT: 'Everything we know\nbegins with an assumption.',
+    heroSub: 'We build websites people remember.',
+    orderK: 'Structure', orderH: 'From a chaos of ideas to a clear structure.', orderT: 'You bring the task. We shape it into a site: pages, meaning and a clear path from the first screen to the request.',
+    shipK: 'Engineering', shipH: 'Your website is a machine.', shipT: 'Every part does a job: pages that load fast, clean code and steady work on any device.',
+    originK: 'Identity', originH: 'Every business has its own DNA.', originT: 'No templates. The design grows out of your brand, so nobody else will have a site like yours.',
+    energyK: 'Conversion', energyH: 'Visitors are energy.', energyT: 'Ads bring people in, and the site turns them into requests. Every block gathers attention the way these panels gather starlight.',
+    holeK: 'Attention', holeH: 'A site people can’t pull away from.', holeT: 'Gravity works online too. A strong first screen draws the visitor in and keeps them to the end.',
+    scaleK: 'Visibility', scaleH: 'Over a billion websites. Yours gets noticed.', scaleT: 'Search optimisation, speed and a memorable look set you apart from everyone else in your niche.',
+    worldK: 'Adaptive', worldH: 'One site, any shape.', worldT: 'It reshapes itself for a phone, a tablet or a desktop. The form changes, the quality stays.',
+    moonK: 'Support', moonH: 'We stay after launch.', moonT: 'Every great website\nstarts with one request.',
     endK: 'Axioma',
     formH: 'Your website request', name: 'Name', phone: 'Phone', email: 'Email', send: 'Send request',
     errName: 'Enter your name', errPhone: 'Enter a valid phone number', errEmail: 'Enter a valid email', errSend: 'Something went wrong. Please try again.',
     after: 'Request sent. We’ll be in touch, {name}.', foot: 'Every scene and every note is generated in real time',
-    tagA: 'Tokamak', tagAs: '41.7 MK · 24 coils', tagB: 'Habitat ring', tagBs: '0.8 g · 412 berths', tagC: 'Antenna', tagCs: '4.2-year signal delay', tagH: 'You are here', tagHs: 'Orion Arm, 26 kly out',
+    tagA: 'Speed', tagAs: 'Pages load without the wait', tagB: 'Adaptive', tagBs: 'Phone, tablet, desktop', tagC: 'SEO', tagCs: 'Search brings clients to you', tagH: 'Your website', tagHs: 'One in a billion',
     noJs: 'This site needs JavaScript and WebGL2.', noGl: 'This browser can’t run WebGL2, which Axioma needs. Try a different browser.',
   },
   ru: {
-    title: 'Axioma — то, что не требует доказательств', desc: 'Axioma создаёт такие сайты. Пролистайте девять сцен, которые рождаются прямо в браузере, и отправьте запрос.',
+    title: 'Axioma — сайты, которые запоминают', desc: 'Axioma проектирует и создаёт запоминающиеся сайты. Отправьте запрос и получите сайт, сделанный под ваш бизнес.',
     backToStart: 'Axioma, в начало', music: 'Музыка', musicOn: 'Музыка вкл', language: 'Сменить язык', nudge: 'Листайте', loading: 'Загрузка',
-    heroSub: 'То, что не требует доказательств.',
-    orderK: 'Порядок', orderH: 'Даже хаос следует правилу.', orderT: 'Три уравнения. Одна траектория, которая никогда не повторяется и никогда не покидает своей формы.',
-    shipK: 'Машина', shipH: 'Всё, что возможно, однажды построят.', shipT: 'АКС-1. Сорок метров хрома, один токамак и экипаж, который не вернётся раньше, чем через двести лет.',
-    originK: 'Исток', originH: 'Всё живое сначала было написано.', originT: 'Четыре буквы и три миллиарда строк. Каждая копия расплетает предыдущую, и этого хватает уже четыре миллиарда лет.',
-    energyK: 'Энергия', energyH: 'Ничто не светит бесплатно.', energyT: 'Девять тысяч панелей смыкаются вокруг одной звезды. Наружу выходит лишь тонкая линия света, и ночь здесь больше не наступает.',
-    holeK: 'Граница', holeH: 'За горизонтом доказательства заканчиваются.', holeT: 'Свет с дальней стороны диска огибает тень и виден сверху. Время здесь идёт иначе, и часы это подтверждают.',
-    scaleK: 'Масштаб', scaleH: 'Двести миллиардов солнц.', scaleT: 'Один оборот занимает четверть миллиарда лет. Где-то на внешнем рукаве что-то маленькое всё ещё спрашивает зачем.',
-    worldK: 'Связность', worldH: 'Любой мир можно развернуть.', worldT: 'Океаны, горы и облака становятся одной лентой. Меняется форма, а связность остаётся.',
-    moonK: 'Тишина', moonH: 'На обратной стороне нет сигнала.', moonT: 'Всё, что мы знаем,\nначинается с допущения.',
+    heroSub: 'Мы создаём сайты, которые запоминают.',
+    orderK: 'Структура', orderH: 'Из хаоса идей — чёткая структура.', orderT: 'Вы приносите задачу, мы превращаем её в сайт: страницы, смыслы и понятный путь от первого экрана до заявки.',
+    shipK: 'Разработка', shipH: 'Ваш сайт — это машина.', shipT: 'Каждая деталь работает на результат: быстрая загрузка, чистый код и стабильная работа на любом устройстве.',
+    originK: 'Айдентика', originH: 'У каждого бизнеса своя ДНК.', originT: 'Никаких шаблонов. Дизайн вырастает из вашего бренда, поэтому такого сайта не будет больше ни у кого.',
+    energyK: 'Конверсия', energyH: 'Посетители — это энергия.', energyT: 'Реклама приводит людей, а сайт превращает их в заявки. Каждый блок собирает внимание, как эти панели собирают свет звезды.',
+    holeK: 'Внимание', holeH: 'Сайт, от которого не оторваться.', holeT: 'Гравитация работает и в интернете. Сильный первый экран притягивает посетителя и удерживает его до конца.',
+    scaleK: 'Заметность', scaleH: 'Больше миллиарда сайтов. Заметят ваш.', scaleT: 'Поисковое продвижение, скорость и запоминающийся образ выделяют вас среди всех в вашей нише.',
+    worldK: 'Адаптивность', worldH: 'Один сайт, любая форма.', worldT: 'Он подстраивается под телефон, планшет и компьютер. Форма меняется, качество остаётся.',
+    moonK: 'Поддержка', moonH: 'Мы остаёмся и после запуска.', moonT: 'Каждый сильный сайт\nначинается с одной заявки.',
     endK: 'Axioma',
     formH: 'Ваш запрос на создание сайта', name: 'Имя', phone: 'Телефон', email: 'Почта', send: 'Отправить запрос',
     errName: 'Введите имя', errPhone: 'Введите корректный номер', errEmail: 'Введите корректную почту', errSend: 'Что-то пошло не так. Попробуйте ещё раз.',
     after: 'Запрос отправлен. Мы свяжемся с вами, {name}.', foot: 'Каждая сцена и каждая нота создаются в реальном времени',
-    tagA: 'Токамак', tagAs: '41,7 МК · 24 катушки', tagB: 'Жилое кольцо', tagBs: '0,8 g · 412 мест', tagC: 'Антенна', tagCs: 'Задержка сигнала 4,2 года', tagH: 'Вы здесь', tagHs: 'Рукав Ориона, 26 тыс. св. лет',
+    tagA: 'Скорость', tagAs: 'Страницы без ожидания', tagB: 'Адаптив', tagBs: 'Телефон, планшет, компьютер', tagC: 'SEO', tagCs: 'Клиенты находят вас в поиске', tagH: 'Ваш сайт', tagHs: 'Один на миллиард',
     noJs: 'Для этого сайта нужны JavaScript и WebGL2.', noGl: 'Этот браузер не поддерживает WebGL2. Попробуйте другой браузер.',
   },
 };
@@ -1583,13 +1583,13 @@ const BOOT = [
   ['TOKAMAK CORE ............................... 41.7 MK', 1],
   ['', 0],
   ['> load axioms --all', 2],
-  ['  [01] order ........ accepted     [05] boundary ..... accepted', 1],
-  ['  [02] machine ...... accepted     [06] scale ........ accepted', 1],
-  ['  [03] origin ....... accepted     [07] continuity ... accepted', 1],
-  ['  [04] energy ....... accepted     [08] silence ...... accepted', 1],
+  ['  [01] structure .... accepted     [05] attention .... accepted', 1],
+  ['  [02] engineering .. accepted     [06] visibility ... accepted', 1],
+  ['  [03] identity ..... accepted     [07] adaptive ..... accepted', 1],
+  ['  [04] conversion ... accepted     [08] support ...... accepted', 1],
   ['', 0],
-  ['> prove axioma', 2],
-  ['  no proof required.', 3],
+  ['> build website', 2],
+  ['  ready.', 3],
 ];
 
 function boot() {
@@ -1778,11 +1778,11 @@ function boot() {
       [.82, 26, 7, 12, 16, 1, 0, 32], [1, 42, 4, 40, 8, 0, 0, 24],
     ]),
     origin: rel(S.origin, [[0, 9, 2, 25, 0, 0, 0, 30], [.5, -7, 1, 18, -1, 2, 0, 30], [1, -3, 5, 13, -2, 6, 0, 32]]),
-    energy: rel(S.energy, [[0, -9, 3, 46, 0, 0, 0, 25], [.5, 15, 7, 46, 0, 0, 0, 25], [1, 3, 8, 34, 0, 0, 0, 30]]),
+    energy: rel(S.energy, [[0, -9, 3, 46, -8, 0, 0, 25], [.36, 2, 5, 46, -7, 0, 0, 25], [.58, 15, 7, 46, 0, 0, 0, 25], [1, 3, 8, 34, 0, 0, 0, 30]]),
     hole: rel(S.hole, [[0, 0, 3.4, 40, 0, .7, 0, 24], [.5, 3.5, 1.9, 27, 0, .6, 0, 26], [.85, 1.4, .9, 13, 0, .2, 0, 38], [1, .3, .3, 5.4, 0, 0, 0, 62]]),
     scale: rel(S.scale, [[0, 14, .5, 13, 0, 1, 0, 56], [.42, 16, 11, 34, 0, 0, 0, 44], [1, 0, 56, 26, 0, -1, 0, 34]]),
     world: rel(S.world, [[0, 0, .6, 16, -1.7, 0, 0, 30], [.45, 2.2, 5.5, 18.5, 0, 0, 0, 30], [1, -6, 7.5, 13, 0, 0, 0, 38]]),
-    moon: rel(S.moon, [[0, 0, 0, 62, 0, 0, 0, 26], [.5, 0, 0, 49, 3.5, 0, 0, 24], [1, 0, 0, 44, 0, 0, 0, 25]]),
+    moon: rel(S.moon, [[0, 0, 0, 62, -13, 0, 0, 26], [.42, 0, 0, 52, -10, 0, 0, 24], [.66, 0, 0, 47, 0, 0, 0, 24], [1, 0, 0, 44, 0, 0, 0, 25]]),
     end: rel(S.hole, [[0, 0, 0, 42, 0, 0, 0, 26], [.5, 0, 0, 33, 0, -1.2, 0, 26], [1, 0, 0, 31, 0, -2.4, 0, 26]]),
   };
 
@@ -1961,7 +1961,7 @@ function boot() {
 
     const c = track(CAM[s.id], u);
     v0.set(c[0], c[1], c[2]); v1.set(c[3], c[4], c[5]);
-    if (camera.aspect < .9 && (s.id === 'world' || s.id === 'order' || s.id === 'origin')) v1.x = SITE[s.id].x;
+    if (camera.aspect < .9 && (s.id === 'world' || s.id === 'order' || s.id === 'origin' || s.id === 'energy' || s.id === 'moon')) v1.x = SITE[s.id].x;
     if (camera.aspect < .9) v0.sub(v1).multiplyScalar(s.id === 'moon' ? 1.5 : s.id === 'end' ? 2.75 : 1.45).add(v1);
     if (camera.aspect < .9 && s.id === 'end') { const k = 10.5 * sstep(.2, .6, u); v0.y -= k; v1.y -= k; }
     camera.position.copy(v0);

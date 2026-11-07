@@ -45,13 +45,13 @@ const BOOT = [
   ['TOKAMAK CORE ............................... 41.7 MK', 1],
   ['', 0],
   ['> load axioms --all', 2],
-  ['  [01] order ........ accepted     [05] boundary ..... accepted', 1],
-  ['  [02] machine ...... accepted     [06] scale ........ accepted', 1],
-  ['  [03] origin ....... accepted     [07] continuity ... accepted', 1],
-  ['  [04] energy ....... accepted     [08] silence ...... accepted', 1],
+  ['  [01] structure .... accepted     [05] attention .... accepted', 1],
+  ['  [02] engineering .. accepted     [06] visibility ... accepted', 1],
+  ['  [03] identity ..... accepted     [07] adaptive ..... accepted', 1],
+  ['  [04] conversion ... accepted     [08] support ...... accepted', 1],
   ['', 0],
-  ['> prove axioma', 2],
-  ['  no proof required.', 3],
+  ['> build website', 2],
+  ['  ready.', 3],
 ];
 
 function boot() {
@@ -240,11 +240,11 @@ function boot() {
       [.82, 26, 7, 12, 16, 1, 0, 32], [1, 42, 4, 40, 8, 0, 0, 24],
     ]),
     origin: rel(S.origin, [[0, 9, 2, 25, 0, 0, 0, 30], [.5, -7, 1, 18, -1, 2, 0, 30], [1, -3, 5, 13, -2, 6, 0, 32]]),
-    energy: rel(S.energy, [[0, -9, 3, 46, 0, 0, 0, 25], [.5, 15, 7, 46, 0, 0, 0, 25], [1, 3, 8, 34, 0, 0, 0, 30]]),
+    energy: rel(S.energy, [[0, -9, 3, 46, -8, 0, 0, 25], [.36, 2, 5, 46, -7, 0, 0, 25], [.58, 15, 7, 46, 0, 0, 0, 25], [1, 3, 8, 34, 0, 0, 0, 30]]),
     hole: rel(S.hole, [[0, 0, 3.4, 40, 0, .7, 0, 24], [.5, 3.5, 1.9, 27, 0, .6, 0, 26], [.85, 1.4, .9, 13, 0, .2, 0, 38], [1, .3, .3, 5.4, 0, 0, 0, 62]]),
     scale: rel(S.scale, [[0, 14, .5, 13, 0, 1, 0, 56], [.42, 16, 11, 34, 0, 0, 0, 44], [1, 0, 56, 26, 0, -1, 0, 34]]),
     world: rel(S.world, [[0, 0, .6, 16, -1.7, 0, 0, 30], [.45, 2.2, 5.5, 18.5, 0, 0, 0, 30], [1, -6, 7.5, 13, 0, 0, 0, 38]]),
-    moon: rel(S.moon, [[0, 0, 0, 62, 0, 0, 0, 26], [.5, 0, 0, 49, 3.5, 0, 0, 24], [1, 0, 0, 44, 0, 0, 0, 25]]),
+    moon: rel(S.moon, [[0, 0, 0, 62, -13, 0, 0, 26], [.42, 0, 0, 52, -10, 0, 0, 24], [.66, 0, 0, 47, 0, 0, 0, 24], [1, 0, 0, 44, 0, 0, 0, 25]]),
     end: rel(S.hole, [[0, 0, 0, 42, 0, 0, 0, 26], [.5, 0, 0, 33, 0, -1.2, 0, 26], [1, 0, 0, 31, 0, -2.4, 0, 26]]),
   };
 
@@ -423,7 +423,7 @@ function boot() {
 
     const c = track(CAM[s.id], u);
     v0.set(c[0], c[1], c[2]); v1.set(c[3], c[4], c[5]);
-    if (camera.aspect < .9 && (s.id === 'world' || s.id === 'order' || s.id === 'origin')) v1.x = SITE[s.id].x;
+    if (camera.aspect < .9 && (s.id === 'world' || s.id === 'order' || s.id === 'origin' || s.id === 'energy' || s.id === 'moon')) v1.x = SITE[s.id].x;
     if (camera.aspect < .9) v0.sub(v1).multiplyScalar(s.id === 'moon' ? 1.5 : s.id === 'end' ? 2.75 : 1.45).add(v1);
     if (camera.aspect < .9 && s.id === 'end') { const k = 10.5 * sstep(.2, .6, u); v0.y -= k; v1.y -= k; }
     camera.position.copy(v0);

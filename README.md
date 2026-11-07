@@ -1,6 +1,6 @@
 # Axioma
 
-A scroll story in nine scenes, in English and Russian. Every scene and every note is generated in the browser with WebGL2 and the Web Audio API: no images, video or audio files.
+Axioma is a website studio. This is its site: nine scenes, in English and Russian. Every scene and every note is generated in the browser with WebGL2 and the Web Audio API: no images, video or audio files.
 
 Open `index.html` through any static server, or see the live site.
 
