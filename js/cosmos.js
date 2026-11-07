@@ -1,13 +1,6 @@
 import * as THREE from 'three';
 import { merge, rng } from './lib.js';
-
-const NOISE = /* glsl */`
-float h31(vec3 p){ p=fract(p*vec3(.1031,.1030,.0973)); p+=dot(p,p.yxz+33.33); return fract((p.x+p.y)*p.z); }
-float n3(vec3 x){ vec3 i=floor(x),f=fract(x); f=f*f*(3.-2.*f);
-  return mix(mix(mix(h31(i),h31(i+vec3(1,0,0)),f.x),mix(h31(i+vec3(0,1,0)),h31(i+vec3(1,1,0)),f.x),f.y),
-             mix(mix(h31(i+vec3(0,0,1)),h31(i+vec3(1,0,1)),f.x),mix(h31(i+vec3(0,1,1)),h31(i+vec3(1,1,1)),f.x),f.y),f.z); }
-float fbm(vec3 p){ float a=.5,s=0.; for(int i=0;i<5;i++){ s+=a*n3(p); p=p*2.04+vec3(1.7,9.2,3.1); a*=.5; } return s; }
-`;
+import { buildStar } from './star.js';
 
 /* ---------------- a glass double helix that unzips ---------------- */
 class Strand extends THREE.Curve {
@@ -80,7 +73,7 @@ export function buildHelix(q = 1) {
 }
 
 /* ---------------- a star being enclosed by a swarm of panels ---------------- */
-export function buildDyson(n) {
+export function buildDyson(n, starTex) {
   const R = rng(31), dirs = [], seed = [];
   const ga = Math.PI * (3 - Math.sqrt(5));
   for (let i = 0; i < n; i++) {
@@ -138,39 +131,20 @@ export function buildDyson(n) {
   }));
   panels.frustumCulled = false;
 
-  const starU = { uTime: { value: 0 } };
-  const star = new THREE.Mesh(new THREE.SphereGeometry(5.7, 96, 64), new THREE.ShaderMaterial({
-    uniforms: starU,
-    vertexShader: `varying vec3 vP,vN,vW; void main(){ vP=position; vec4 w=modelMatrix*vec4(position,1.); vW=w.xyz; vN=mat3(modelMatrix)*normal; gl_Position=projectionMatrix*viewMatrix*w; }`,
-    fragmentShader: /* glsl */`varying vec3 vP,vN,vW; uniform float uTime; ${NOISE}
-      void main(){
-        vec3 p=normalize(vP);
-        vec3 q=p*2.6+vec3(0.,uTime*.05,0.);
-        float w=fbm(q+fbm(q*1.7)*.8);
-        float g=fbm(p*14.+uTime*.07);
-        float e=pow(max(dot(normalize(vN),normalize(cameraPosition-vW)),0.),.55);
-        vec3 c=mix(vec3(1.05,.26,.03),vec3(2.5,1.05,.22),smoothstep(.3,.68,w));
-        c*=.72+.56*g;
-        c=mix(vec3(.8,.14,.02),c,e);
-        gl_FragColor=vec4(c,1.);
-      }`,
-  }));
+  const star = buildStar(5.7, starTex);
 
   const glowMat = (fs, uniforms = {}) => new THREE.ShaderMaterial({
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, uniforms,
     vertexShader: `varying vec2 vU; void main(){ vU=uv*2.-1.; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`, fragmentShader: fs,
   });
-  const halo = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), glowMat(`varying vec2 vU; uniform float uI;
-    void main(){ float r=length(vU); float a=exp(-max(r-.28,0.)*7.)*.8+exp(-max(r-.28,0.)*2.8)*.12; a*=1.-smoothstep(.85,1.,r); a*=step(.26,r)+smoothstep(.2,.26,r);
-      gl_FragColor=vec4(vec3(1.,.5,.14)*a*uI,1.); }`, { uI: { value: 1 } }));
   // the sheet of light that escapes through the slit
   const sheet = new THREE.Mesh(new THREE.PlaneGeometry(76, 76), glowMat(`varying vec2 vU; uniform float uI;
     void main(){ float r=length(vU)*38.; float a=smoothstep(8.2,8.7,r)*exp(-(r-8.6)*.14)*(1.-smoothstep(30.,38.,r));
       gl_FragColor=vec4(vec3(1.,.66,.3)*a*.15*uI,1.); }`, { uI: { value: 0 } }));
   sheet.rotation.x = -Math.PI / 2;
 
-  const group = new THREE.Group(); group.add(star, panels, sheet, halo);
-  return { group, panels, star, halo, sheet, u, starU };
+  const group = new THREE.Group(); group.add(star.group, panels, sheet);
+  return { group, panels, star, sheet, u };
 }
 
 /* ---------------- a spiral galaxy ---------------- */

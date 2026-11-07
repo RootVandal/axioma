@@ -13,7 +13,7 @@ vec3 dirOf(vec2 uv){ float ph=(uv.x-.5)*6.2831853,th=(uv.y-.5)*3.14159265; retur
 `;
 
 /** Bakes a procedural surface into a float texture, one strip per task, so scrolling never stalls. */
-async function bake(renderer, w, h, fs, strips, mips = true) {
+export async function bake(renderer, w, h, fs, strips, mips = true) {
   const rt = new THREE.WebGLRenderTarget(w, h, {
     type: THREE.HalfFloatType, minFilter: mips ? THREE.LinearMipmapLinearFilter : THREE.LinearFilter, magFilter: THREE.LinearFilter,
     wrapS: THREE.RepeatWrapping, depthBuffer: false, generateMipmaps: mips,

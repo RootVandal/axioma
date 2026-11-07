@@ -6,6 +6,7 @@ import { buildShip, buildEnv } from './ship.js';
 import { buildHole } from './hole.js';
 import { buildMoon, buildPlanet, buildDebris } from './worlds.js';
 import { buildHelix, buildDyson, buildGalaxy } from './cosmos.js';
+import { starSurface, buildStar, buildWarp, buildBlast, buildDust } from './star.js';
 import { Sound } from './sound.js';
 import { t, onLang, applyLang, toggleLang } from './i18n.js';
 
@@ -16,24 +17,26 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ------- timeline, in hundredths of a viewport of scroll ------- */
 const SHOTS = [
-  { id: 'hero', a: 0, b: 160, n: '00', t: 'Start' },
-  { id: 'order', a: 160, b: 420, n: '01', t: 'Order' },
-  { id: 'ship', a: 420, b: 760, n: '02', t: 'Machine' },
-  { id: 'origin', a: 760, b: 1000, n: '03', t: 'Origin' },
-  { id: 'energy', a: 1000, b: 1260, n: '04', t: 'Energy' },
-  { id: 'hole', a: 1260, b: 1530, n: '05', t: 'Boundary' },
-  { id: 'scale', a: 1530, b: 1780, n: '06', t: 'Scale' },
-  { id: 'world', a: 1780, b: 2040, n: '07', t: 'Continuity' },
-  { id: 'moon', a: 2040, b: 2290, n: '08', t: 'Silence' },
-  { id: 'end', a: 2290, b: 2600, n: '09', t: 'Axiom' },
+  { id: 'hero', a: 0, b: 160 },
+  { id: 'order', a: 160, b: 420 },
+  { id: 'ship', a: 420, b: 760 },
+  { id: 'origin', a: 760, b: 1000 },
+  { id: 'energy', a: 1000, b: 1260 },
+  { id: 'scale', a: 1260, b: 1510 },
+  { id: 'world', a: 1510, b: 1770 },
+  { id: 'moon', a: 1770, b: 2020 },
+  { id: 'hole', a: 2020, b: 2290 },
+  { id: 'end', a: 2290, b: 2600 },
 ];
 const END = 2600, CUT = 46, BOOT_LEN = 1.9;
 const LIGHT = { order: .973, origin: .976, world: .943 };   // background as shown on screen
-const WAIT = { id: 'wait', n: '', t: '' };
+const WAIT = { id: 'wait' }, WARP = { id: 'warp' }, NOVA = { id: 'nova' };
+// finale clock, in seconds from the moment the camera crosses the horizon
+const JUMP = 2.7, BOOM = JUMP + 2.5, DONE = BOOM + 3.7, TRIGGER = 2284, REST = 2580;
 const SITE = {
   hero: new THREE.Vector3(0, 0, 0), order: new THREE.Vector3(600, 0, 0), ship: new THREE.Vector3(1200, 0, 0),
   hole: new THREE.Vector3(1800, 0, 0), world: new THREE.Vector3(2400, 0, 0), moon: new THREE.Vector3(3000, 0, 0),
-  origin: new THREE.Vector3(3600, 0, 0), energy: new THREE.Vector3(4200, 0, 0), scale: new THREE.Vector3(4800, 0, 0),
+  origin: new THREE.Vector3(3600, 0, 0), energy: new THREE.Vector3(4200, 0, 0), scale: new THREE.Vector3(4800, 0, 0), nova: new THREE.Vector3(5400, 0, 0),
 };
 
 const BOOT = [
@@ -105,13 +108,14 @@ function boot() {
   };
 
   let scale = params.get('q') ? +params.get('q') : Math.min(devicePixelRatio || 1, soft ? .7 : mobile ? 1.3 : 1.5);
-  let hole = null, stars = null, galaxy = null;
+  let hole = null, stars = null, galaxy = null, dustU = null;
   const size = () => {
     const w = Math.max(2, Math.round(innerWidth * scale)), h = Math.max(2, Math.round(innerHeight * scale));
     renderer.setPixelRatio(1); renderer.setSize(w, h, false); post.setSize(w, h);
     if (hole) hole.mesh.userData.u.uAspect.value = innerWidth / Math.max(innerHeight, 1);
     if (stars) stars.userData.u.uPx.value = Math.max(1, h / 720) * 1.5;
     if (galaxy) galaxy.userData.u.uPx.value = h / 720;
+    if (dustU) dustU.uPx.value = Math.max(1, h / 720);
   };
   size();
 
@@ -126,7 +130,7 @@ function boot() {
   group('hero').add(torus);
   const torusU = torus.userData.u;
 
-  let att, ship, sun, holeU, helix, helixU, dyson, planet, planetU, moon, moonU, corona;
+  let att, ship, sun, holeU, helix, helixU, dyson, planet, planetU, moon, moonU, corona, warp, warpU, star, blast, blastU, dust;
   const jobs = {
     order() {
       att = buildAttractor(Math.round(1500 * q), 240);
@@ -151,8 +155,8 @@ function boot() {
       group('origin').add(helix);
       helixU = helix.userData.u;
     },
-    energy() {
-      dyson = buildDyson(soft ? 2400 : mobile ? 4200 : 9000);
+    async energy() {
+      dyson = buildDyson(soft ? 2400 : mobile ? 4200 : 9000, await surface());
       dyson.group.rotation.x = .2;
       group('energy').add(dyson.group);
     },
@@ -198,9 +202,19 @@ function boot() {
       world.moon.add(corona);
     },
   };
+  const surface = () => starSurface(renderer, soft ? 1024 : mobile ? 1536 : 2048);
+  jobs.nova = async () => {
+    warp = buildWarp(); warpU = warp.userData.u;
+    group('warp').add(warp);
+    star = buildStar(6, await surface());
+    blast = buildBlast(); blastU = blast.userData.u;
+    dust = buildDust(soft ? 60000 : mobile ? 130000 : 320000); dustU = dust.userData.u;
+    group('nova').add(star.group, blast, dust);
+    size();
+  };
   const ready = { hero: true };
   const queue = Object.keys(jobs);
-  const needOf = id => (id === 'end' ? 'hole' : id);
+  const needOf = id => (id === 'end' ? 'nova' : id);
   /** Compiles a scene's real shader variants off-screen. Lights must be on here, or the programs
    *  would not match and the browser would stall recompiling them the moment the scene appears. */
   async function prepare(id) {
@@ -216,7 +230,7 @@ function boot() {
       // whatever the visitor is closest to comes first
       const here = y;
       queue.sort((p, r) => {
-        const cost = id => { const d = SHOTS.find(k => k.id === id).a - here; return d < -40 ? 4000 - d : Math.abs(d); };
+        const cost = id => { const d = (id === 'nova' ? 2290 : SHOTS.find(k => k.id === id).a) - here; return d < -40 ? 4000 - d : Math.abs(d); };
         return cost(p) - cost(r);
       });
       const id = queue.shift();
@@ -241,11 +255,13 @@ function boot() {
     ]),
     origin: rel(S.origin, [[0, 9, 2, 25, 0, 0, 0, 30], [.5, -7, 1, 18, -1, 2, 0, 30], [1, -3, 5, 13, -2, 6, 0, 32]]),
     energy: rel(S.energy, [[0, -9, 3, 46, -8, 0, 0, 25], [.36, 2, 5, 46, -7, 0, 0, 25], [.58, 15, 7, 46, 0, 0, 0, 25], [1, 3, 8, 34, 0, 0, 0, 30]]),
-    hole: rel(S.hole, [[0, 0, 3.4, 40, 0, .7, 0, 24], [.5, 3.5, 1.9, 27, 0, .6, 0, 26], [.85, 1.4, .9, 13, 0, .2, 0, 38], [1, .3, .3, 5.4, 0, 0, 0, 62]]),
+    hole: rel(S.hole, [[0, 0, 3.4, 40, 0, .7, 0, 24], [.5, 3.5, 1.9, 27, 0, .6, 0, 26], [.8, 1.4, .9, 13, 0, .2, 0, 38], [.95, .3, .3, 4.4, 0, 0, 0, 62], [1, 0, 0, 1.6, 0, 0, 0, 74]]),
     scale: rel(S.scale, [[0, 14, .5, 13, 0, 1, 0, 56], [.42, 16, 11, 34, 0, 0, 0, 44], [1, 0, 56, 26, 0, -1, 0, 34]]),
     world: rel(S.world, [[0, 0, .6, 16, -1.7, 0, 0, 30], [.45, 2.2, 5.5, 18.5, 0, 0, 0, 30], [1, -6, 7.5, 13, 0, 0, 0, 38]]),
     moon: rel(S.moon, [[0, 0, 0, 62, -13, 0, 0, 26], [.42, 0, 0, 52, -10, 0, 0, 24], [.66, 0, 0, 47, 0, 0, 0, 24], [1, 0, 0, 44, 0, 0, 0, 25]]),
-    end: rel(S.hole, [[0, 0, 0, 42, 0, 0, 0, 26], [.5, 0, 0, 33, 0, -1.2, 0, 26], [1, 0, 0, 31, 0, -2.4, 0, 26]]),
+    warp: [[0, 0, 0, 10, 0, 0, 0, 40], [1, 0, 0, 10, 0, 0, 0, 40]],
+    nova: rel(S.nova, [[0, 0, 0, 31, 0, 0, 0, 26], [1, 0, 0, 31, 0, -2.4, 0, 26]]),
+    end: rel(S.nova, [[0, 0, 0, 31, 0, -2.4, 0, 26], [1, 0, 0, 31, 0, -2.4, 0, 26]]),
   };
 
   /* ------- DOM ------- */
@@ -338,29 +354,36 @@ function boot() {
   let y = scrollY / vh() * 100, last = performance.now(), T = 0, slowRun = 0, frames = 0, cur_ = null, cardI = -1, cutSeen = -1;
   const v0 = new THREE.Vector3(), v1 = new THREE.Vector3(), tmp = new THREE.Vector3(), sunW = new THREE.Vector3(), qInv = new THREE.Quaternion(), tq = new THREE.Quaternion();
   const card = $('card'), nudge = $('nudge');
+  let cine = scrollY / vh() * 100 > TRIGGER ? 'done' : 'idle', cineT = 0, lockY = 0, warpPhase = 0, doneT = 0, lastShotEnd = false;
+  const stop = e => { e.preventDefault(); };
+  const stopKeys = e => { if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'Home', 'End'].includes(e.key)) e.preventDefault(); };
+  const lock = on => {
+    const f = on ? addEventListener : removeEventListener, o = { passive: false };
+    f('wheel', stop, o); f('touchmove', stop, o); f('keydown', stopKeys);
+  };
   let lastY = y, idleAt = performance.now(), nudged = false;
   onLang(() => { showSound(); showAfter(); cardI = -1; });
   applyLang();
 
   function setShot(s) {
     cur_ = s;
-    for (const k of Object.keys(world)) world[k].visible = k === s.id || (k === 'hole' && s.id === 'end');
-    if (hole) hole.mesh.visible = s.id === 'hole' || s.id === 'end';
+    for (const k of Object.keys(world)) world[k].visible = k === s.id || (k === 'nova' && s.id === 'end');
+    if (hole) hole.mesh.visible = s.id === 'hole';
     const light = s.id in LIGHT;
     const bg = light ? Math.pow(LIGHT[s.id], 2.2) : 0;
     scene.background.setRGB(bg, bg, bg);
-    stars.visible = !light;
+    stars.visible = !light && s !== WARP;
     post.c.uLight.value = light ? 1 : 0;
-    post.c.uBloom.value = light ? 0 : s.id === 'ship' ? .05 : s.id === 'moon' ? .1 : s.id === 'hole' ? .14 : s.id === 'energy' ? .16 : s.id === 'scale' ? .2 : .22;
+    post.c.uBloom.value = light ? 0 : s.id === 'ship' ? .05 : s.id === 'moon' ? .1 : s.id === 'hole' ? .14 : s.id === 'energy' ? .2 : s.id === 'scale' ? .2 : s.id === 'warp' ? .16 : s.id === 'nova' ? .12 : .22;
     post.c.uVig.value = light ? .1 : .55;
-    post.c.uCA.value = light ? .002 : (s.id === 'end' || s.id === 'hole' || s.id === 'scale') ? 0 : .005;
+    post.c.uCA.value = light ? .002 : (s.id === 'end' || s.id === 'hole' || s.id === 'scale' || s.id === 'warp') ? 0 : .005;
     post.c.uAperture.value = s.id === 'ship' ? .34 : 0;
     scene.environmentIntensity = s.id === 'ship' ? 1 : .5;
     if (sun) sun.visible = s.id === 'ship';
     renderer.shadowMap.needsUpdate = s.id === 'ship';
     document.body.dataset.tone = light ? 'light' : 'dark';
     document.body.dataset.shot = s.id;
-    if (s !== WAIT) sound.scene(s.id);
+    if (s !== WAIT && s !== WARP && s !== NOVA) sound.scene(s.id);
   }
 
   function frame(now) {
@@ -392,9 +415,23 @@ function boot() {
       if (bootT > BOOT_LEN + 1.6) bootT = 99;
     }
 
+    /* the finale takes over from scrolling once the camera crosses the horizon */
+    if (cine === 'idle' && y >= TRIGGER) {
+      if (reduced || yT > TRIGGER + 90) cine = 'done';
+      else if (ready.nova) { cine = 'play'; cineT = 0; lockY = TRIGGER * vh() / 100; lock(true); sound.finale(JUMP, BOOM); }
+    }
+    if (cine === 'done' && y < 2200) cine = 'idle';
+    if (cine === 'play') {
+      cineT += clamp(real, .001, .25);
+      if (window.__hold != null) cineT = window.__hold;
+      scrollTo(0, lockY); y = TRIGGER;
+      if (cineT >= DONE) { cine = 'done'; lock(false); y = REST; scrollTo(0, REST * vh() / 100); }
+    }
+
     const pY = clamp(y, 0, END - .01);
     const found = SHOTS.find(k => pY >= k.a && pY < k.b) || SHOTS[SHOTS.length - 1];
-    const s = ready[needOf(found.id)] ? found : WAIT;
+    const scripted = cine === 'play' ? (cineT < JUMP ? WARP : NOVA) : null;
+    const s = scripted || (ready[needOf(found.id)] ? found : WAIT);
     if (s !== cur_) setShot(s);
     const u = clamp((pY - found.a) / (found.b - found.a));
 
@@ -402,7 +439,7 @@ function boot() {
     let cardV = 0, cardAt = -1;
     for (let i = 1; i < SHOTS.length; i++) {
       const at = SHOTS[i].a, p = (pY - (at - CUT / 2)) / CUT;
-      if (p <= 0 || p >= 1) continue;
+      if (p <= 0 || p >= 1 || (SHOTS[i].id === 'end' && !reduced)) continue;
       shut = Math.max(shut, sstep(0, .4, p) * (1 - sstep(.6, 1, p)));
       fill = LIGHT[SHOTS[i].id] || 0;
       cardV = sstep(.26, .42, p) * (1 - sstep(.58, .74, p)); cardAt = i;
@@ -413,7 +450,7 @@ function boot() {
     const ln = fill > .5 ? .08 : .92;
     post.c.uLine.value.setRGB(ln, ln, ln);
     post.c.uShut.value = shut;
-    if (s.id === 'end') post.c.uBloom.value = mobile ? .07 : .22;
+    if (s.id === 'end') post.c.uBloom.value = mobile ? .08 : .2;
     if (cardAt !== cardI && cardAt >= 0) {
       cardI = cardAt;
       card.firstElementChild.textContent = t(cardAt ? SHOTS[cardAt].id + 'K' : 'loading');
@@ -421,14 +458,22 @@ function boot() {
     card.style.opacity = cardV.toFixed(3);
     card.style.color = fill > .5 ? '#0a0c10' : '#f2f4f7';
 
-    const c = track(CAM[s.id], u);
+    const novaU = s === NOVA ? sstep(BOOM + .6, DONE - .6, cineT) : 0;
+    const c = track(CAM[s.id], s === NOVA ? novaU : u);
     v0.set(c[0], c[1], c[2]); v1.set(c[3], c[4], c[5]);
     if (camera.aspect < .9 && (s.id === 'world' || s.id === 'order' || s.id === 'origin' || s.id === 'energy' || s.id === 'moon')) v1.x = SITE[s.id].x;
-    if (camera.aspect < .9) v0.sub(v1).multiplyScalar(s.id === 'moon' ? 1.5 : s.id === 'end' ? 2.75 : 1.45).add(v1);
-    if (camera.aspect < .9 && s.id === 'end') { const k = 10.5 * sstep(.2, .6, u); v0.y -= k; v1.y -= k; }
+    const wordFit = s === NOVA ? lerp(1.6, 2.75, sstep(BOOM, BOOM + 1.2, cineT)) : 2.75;
+    if (camera.aspect < .9) v0.sub(v1).multiplyScalar(s.id === 'moon' ? 1.5 : s.id === 'end' || s.id === 'nova' ? wordFit : 1.45).add(v1);
+    if (camera.aspect < .9 && (s.id === 'end' || s.id === 'nova')) { const k = 10.5 * (s === NOVA ? novaU : 1); v0.y -= k; v1.y -= k; }
     camera.position.copy(v0);
     const dist = v0.distanceTo(v1);
     camera.position.x += mxs * dist * .012; camera.position.y -= mys * dist * .008;
+    if (s === NOVA) {                    // the hard stop recoils, the blast shakes
+      const a = cineT - JUMP, b = cineT - BOOM;
+      camera.position.z += 3.2 * Math.exp(-Math.max(a, 0) * 7) * Math.cos(a * 16);
+      const q = b > 0 ? Math.exp(-b * 2.4) * .34 : 0;
+      camera.position.x += Math.sin(T * 47) * q; camera.position.y += Math.cos(T * 53) * q;
+    }
     camera.lookAt(v1); camera.fov = c[6];
     camera.updateProjectionMatrix();
     stars.position.copy(camera.position);
@@ -462,28 +507,52 @@ function boot() {
       helix.rotation.y = .3 + u * 2.4 + T * .04;
     }
     if (s.id === 'energy') {
-      dyson.u.uTime.value = T; dyson.starU.uTime.value = T;
+      dyson.u.uTime.value = T;
       const b = sstep(.08, .88, u);
       dyson.u.uBuild.value = b;
       dyson.group.rotation.y = T * .022;
       dyson.group.updateMatrixWorld();
-      dyson.halo.quaternion.copy(camera.quaternion).premultiply(tq.copy(dyson.group.quaternion).invert());
-      dyson.halo.material.uniforms.uI.value = (1 - sstep(.5, .92, b)) * .3;
+      dyson.star.update(T, camera);
+      dyson.star.cu.uI.value = 1 - sstep(.5, .92, b);
       dyson.sheet.material.uniforms.uI.value = sstep(.6, 1, b);
     }
-    if (s.id === 'hole' || s.id === 'end') {
-      const fall = s.id === 'hole' ? sstep(.6, 1, u) : 0;
-      holeU.uTime.value = T + (s.id === 'hole' ? u * 30 : 0);
+    if (s === WARP) {
+      const k = cineT, sp = sstep(0, .55, k) * (1 - sstep(JUMP - .1, JUMP, k));
+      warpPhase += real * (.22 + sp * 1.5);
+      warpU.uPhase.value = warpPhase; warpU.uSpeed.value = sp; warpU.uAspect.value = camera.aspect; warpU.uFade.value = sstep(0, .25, k);
+    }
+    if (s === NOVA || s.id === 'end') {
+      const k = s === NOVA ? cineT - JUMP : 99, b = s === NOVA ? cineT - BOOM : 99;
+      const squeeze = sstep(1.9, 2.5, k);
+      star.group.visible = b < 0;
+      if (b < 0) {
+        const pulse = 1 + .05 * Math.sin(k * 3.2) * sstep(1.2, 1.9, k);
+        star.group.scale.setScalar(Math.max(.02, (1 + .3 * Math.exp(-k * 7)) * pulse * (1 - squeeze * squeeze * squeeze * .985)));
+        star.u.uHeat.value = sstep(1.5, 2.45, k);
+        star.u.uGain.value = 1 + squeeze * 1.2;
+        star.cu.uPull.value = squeeze;
+        star.update(T, camera);
+      }
+      blast.quaternion.copy(camera.quaternion);
+      blastU.uT.value = s === NOVA ? Math.max(b, 0) : Math.min(5.5 + (T - doneT) * .08, 9);
+      blastU.uI.value = b >= 0 ? lerp(1, .3, sstep(1.4, 3.4, b)) : 0;
+      dust.visible = b >= 0;
+      dustU.uAge.value = s === NOVA ? Math.max(b, 0) : 6;
+      dustU.uTime.value = T;
+      dustU.uBlast.value = accepted ? sstep(0, 1.7, T - acceptT) * (1 - sstep(3, 7.5, T - acceptT)) : 0;
+      dustU.uGain.value = (mobile ? .62 : 1) * (1 - dustU.uBlast.value * .45);
+      // one slow swell of light, never a strobe
+      post.c.uExposure.value = 1 + (b >= 0 && s === NOVA ? .45 * sstep(0, .2, b) * Math.exp(-b * 1.2) : 0) + squeeze * .2 * (b < 0 ? 1 : 0);
+      stars.userData.u.uAmt.value = b < 0 ? 1 - squeeze * .7 : .3 + .7 * clamp(s === NOVA ? b / 3 : 1);
+    }
+    if (s.id === 'end') { if (lastShotEnd !== true) { doneT = T; lastShotEnd = true; } } else lastShotEnd = false;
+    if (s.id === 'hole') {
+      const fall = sstep(.6, 1, u);
+      holeU.uTime.value = T + u * 30;
       holeU.uFall.value = fall;
-      const mk = s.id === 'end' ? sstep(.06, .5, u) : 0;
-      holeU.uMorph.value = mk;
-      holeU.uLens.value = 1 - mk;
-      holeU.uBlast.value = accepted ? sstep(0, 1.7, T - acceptT) * (1 - sstep(3, 7.5, T - acceptT)) : 0;
-      hole.shadow.visible = hole.ring.visible = mk < .28;
-      const vis = 1 - sstep(.05, .28, mk);
-      hole.ringU.uI.value = vis; hole.shadow.scale.setScalar(1.28 * Math.max(vis, .001));
+      hole.ringU.uI.value = 1 - sstep(.86, .96, u);
       hole.ring.quaternion.copy(camera.quaternion);
-      holeU.uGain.value = lerp(mobile ? 1.5 : 1, mobile ? .34 : .9, mk) * (1 - holeU.uBlast.value * .45);
+      holeU.uGain.value = (mobile ? 1.5 : 1) * (1 - sstep(.9, .985, u));
     }
     if (s.id === 'scale') {
       galaxy.rotation.y = -.5 - u * .5 - T * .006;
@@ -514,7 +583,7 @@ function boot() {
     const bootV = bootT > 9 ? 1 : sstep(BOOT_LEN + .6, BOOT_LEN + 1.3, bootT);
     for (const b of beats) {
       const up = sstep(b.a, b.a + b.f, pY), out = 1 - sstep(b.b - b.f, b.b, pY);
-      const v = Math.round(up * out * bootV * (s === WAIT ? 0 : 1) * 200) / 200;
+      const v = Math.round(up * out * bootV * (s === WAIT || cine === 'play' ? 0 : 1) * 200) / 200;
       if (v === b.v) continue;
       b.v = v;
       b.el.style.opacity = v;
@@ -524,7 +593,7 @@ function boot() {
     }
     // first slide: always invite the scroll. Later: only after five quiet seconds
     if (Math.abs(yT - lastY) > .5) { lastY = yT; idleAt = now; }
-    const want = bootV >= 1 && s !== WAIT && shut < .02 && pY < 2440 && (pY < 30 || now - idleAt > 5000);
+    const want = bootV >= 1 && s !== WAIT && cine !== 'play' && shut < .02 && pY < 2270 && (pY < 30 || now - idleAt > 5000);
     if (want !== nudged) { nudged = want; nudge.classList.toggle('show', want); }
     for (const l of labels) {
       const v = s.id === l.shot && pY > l.a && pY < l.b;
@@ -540,7 +609,7 @@ function boot() {
     post.render(scene, camera);
   }
 
-  if (params.has('debug')) window.__ax = { ready, jump(v) { y = v; scrollTo(0, v * vh() / 100); }, get state() { return { shot: cur_?.id, scale, programs: renderer.info.programs.length }; } };
+  if (params.has('debug')) window.__ax = { ready, finale() { return { cine, cineT }; }, jump(v) { y = v; scrollTo(0, v * vh() / 100); }, get state() { return { shot: cur_?.id, scale, programs: renderer.info.programs.length }; } };
   drawTerm(0);
   requestAnimationFrame(frame);
   setTimeout(buildAll, 60);

@@ -4,7 +4,7 @@ import { rng } from './lib.js';
 export const WORDMARK = 'M0 150 L65 10 L130 150 M174 10 L304 150 M304 10 L174 150 M368 10 V150 M412 80 a70 70 0 1 0 140 0 a70 70 0 1 0 -140 0 M596 150 V10 L666 112 L736 10 V150 M780 150 L845 10 L910 150';
 
 /** Random points inside the wordmark, in world units centred on the origin. */
-function wordPoints(n, width) {
+export function wordPoints(n, width) {
   const W = 1860, H = 340, c = document.createElement('canvas'); c.width = W; c.height = H;
   const x = c.getContext('2d', { willReadFrequently: true });
   x.setTransform(2, 0, 0, 2, 20, 10);
@@ -33,17 +33,16 @@ export function buildHole(n) {
   q.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-1, -1, 0, 1, -1, 0, 1, 1, 0, -1, 1, 0]), 3));
   q.setIndex([0, 1, 2, 0, 2, 3]);
   q.setAttribute('aSeed', new THREE.InstancedBufferAttribute(seed, 4));
-  q.setAttribute('aWord', new THREE.InstancedBufferAttribute(wordPoints(n, 15), 3));
   q.instanceCount = n;
   const u = {
-    uTime: { value: 0 }, uMorph: { value: 0 }, uLens: { value: 1 }, uFall: { value: 0 }, uAspect: { value: 1 }, uPx: { value: 1 },
-    uGain: { value: 1 }, uCenter: { value: new THREE.Vector3() }, uTilt: { value: new THREE.Matrix4() }, uBlast: { value: 0 },
+    uTime: { value: 0 }, uLens: { value: 1 }, uFall: { value: 0 }, uAspect: { value: 1 }, uPx: { value: 1 },
+    uGain: { value: 1 }, uCenter: { value: new THREE.Vector3() }, uTilt: { value: new THREE.Matrix4() },
   };
   const m = new THREE.Mesh(q, new THREE.ShaderMaterial({
     transparent: true, depthWrite: false, depthTest: true, blending: THREE.AdditiveBlending, uniforms: u, side: THREE.DoubleSide,
     vertexShader: /* glsl */`
-      attribute vec4 aSeed; attribute vec3 aWord;
-      uniform float uTime,uMorph,uLens,uFall,uAspect,uPx,uBlast; uniform vec3 uCenter; uniform mat4 uTilt;
+      attribute vec4 aSeed;
+      uniform float uTime,uLens,uFall,uAspect,uPx; uniform vec3 uCenter; uniform mat4 uTilt;
       varying vec3 vC; varying vec2 vQ; varying float vA;
       void main(){
         float rn=pow(aSeed.x,1.75);
@@ -56,14 +55,8 @@ export function buildHole(n) {
         vec3 tang=vec3(-sin(a),0.,cos(a));
         disc=(uTilt*vec4(disc,1.)).xyz+uCenter; tang=(uTilt*vec4(tang,0.)).xyz;
 
-        float st=fract(aSeed.w*7.3)*.5;
-        float mk=smoothstep(st,st+.5,uMorph);
-        mk=mk*mk*(3.-2.*mk);
-        vec3 word=uCenter+aWord;
-        word.xy+=vec2(sin(uTime*.7+aSeed.y*9.),cos(uTime*.6+aSeed.w*9.))*.008;
-        word+=normalize(vec3(sin(aSeed.y*7.),aSeed.z,cos(aSeed.y*3.)))*uBlast*(.25+1.9*aSeed.w*aSeed.w);
-        vec3 p=mix(disc,word,mk);
-        tang=mix(tang,vec3(.1,1.,0.),mk);
+        const float mk=0.;
+        vec3 p=disc;
 
         vec4 v=viewMatrix*vec4(p,1.);
         vec4 cv=viewMatrix*vec4(uCenter,1.);

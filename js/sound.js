@@ -33,6 +33,7 @@ class Score {
     out.connect(comp); comp.connect(c.destination);
 
     this.dry = c.createGain(); this.dry.gain.value = .75; this.dry.connect(out);
+    this.fx = c.createGain(); this.fx.gain.value = .9; this.fx.connect(comp);   // effects ride above the ducked score
     this.wet = c.createGain(); this.wet.gain.value = .55;
     const conv = c.createConvolver(); conv.buffer = this.impulse(5.5); conv.connect(this.wet); this.wet.connect(out);
     this.verb = conv;
@@ -131,6 +132,25 @@ class Score {
   }
 }
 
+/** Filtered noise with a frequency sweep, the base of every effect in the finale. */
+function sweep(c, dest, t, dur, f0, f1, g0, gPeak, peakAt, q = .7, type = 'bandpass') {
+  const n = c.createBufferSource(), b = c.createBuffer(1, Math.ceil(c.sampleRate * Math.min(dur + .1, 3)), c.sampleRate), d = b.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  n.buffer = b; n.loop = true;
+  const f = c.createBiquadFilter(); f.type = type; f.Q.value = q;
+  f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(f1, t + dur);
+  const g = c.createGain(); g.gain.setValueAtTime(g0, t);
+  g.gain.linearRampToValueAtTime(gPeak, t + peakAt); g.gain.exponentialRampToValueAtTime(.0004, t + dur);
+  n.connect(f); f.connect(g); g.connect(dest); n.start(t); n.stop(t + dur + .05);
+  return g;
+}
+function drop(c, dest, t, dur, f0, f1, vol) {
+  const o = c.createOscillator(), g = c.createGain();
+  o.frequency.setValueAtTime(f0, t); o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0004, t + dur);
+  o.connect(g); g.connect(dest); o.start(t); o.stop(t + dur + .05);
+}
+
 export class Sound {
   constructor() { this.on = false; this.name = 'hero'; }
 
@@ -172,6 +192,23 @@ export class Sound {
   }
 
   swell() { if (this.on) this.score.swell(this.ctx.currentTime); }
+
+  /** Ducks the score, then plays the jump, the stop, the collapse and the blast at the given offsets. */
+  finale(stopAt, boomAt) {
+    if (!this.on) return;
+    const c = this.ctx, t = c.currentTime, s = this.score, end = boomAt + 5;
+    const o = s.out.gain; o.cancelScheduledValues(t); o.setTargetAtTime(.1, t, .15); o.setTargetAtTime(.8, t + end, 1.2);
+    sweep(c, s.fx, t, stopAt, 180, 3200, .02, .42, stopAt * .9, 1.1);
+    const w = c.createOscillator(), wg = c.createGain(); w.type = 'sawtooth';
+    w.frequency.setValueAtTime(34, t); w.frequency.exponentialRampToValueAtTime(120, t + stopAt);
+    wg.gain.setValueAtTime(0, t); wg.gain.linearRampToValueAtTime(.14, t + stopAt * .8); wg.gain.linearRampToValueAtTime(0, t + stopAt + .02);
+    w.connect(wg); wg.connect(s.fx); w.start(t); w.stop(t + stopAt + .05);
+    drop(c, s.fx, t + stopAt, .8, 96, 30, .9);
+    sweep(c, s.fx, t + boomAt - .62, .66, 300, 5200, .001, .34, .6, .6, 'highpass');
+    drop(c, s.fx, t + boomAt, 4.2, 68, 19, 1.1);
+    sweep(c, s.fx, t + boomAt, 4.6, 4200, 90, .85, .85, .02, .4, 'lowpass');
+    sweep(c, s.verb, t + boomAt, 3, 2600, 200, .34, .34, .02, .5, 'lowpass');
+  }
 
   /** Final chord on acceptance: the piece resolves to D major. */
   resolve() {
