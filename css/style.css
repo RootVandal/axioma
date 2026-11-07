@@ -72,7 +72,7 @@ body[data-tone=dark] .beat h2,body[data-tone=dark] .txt{text-shadow:0 0 22px rgb
 #apply button:hover{opacity:.84}#apply button:disabled{opacity:.4;cursor:wait}
 #apply button i{font-style:normal;transition:transform .2s}#apply button:hover i{transform:translateX(4px)}
 .trap{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
-.status{min-height:18px;font:400 12px/1.4 var(--mono);color:#ffb3a4}
+.status{min-height:10px;font:400 12px/1.4 var(--mono);color:#ffb3a4}
 .after{font:300 clamp(20px,2.2vw,32px)/1.25 var(--sans);opacity:0;position:absolute;left:0;right:0;top:clamp(20px,5vh,50px);pointer-events:none;transition:opacity 1.2s .9s}
 .accepted .after{opacity:1}
 .accepted #apply{opacity:0;visibility:hidden;transition:opacity .5s,visibility 0s .5s}
@@ -133,5 +133,9 @@ noscript .msg{display:block}
   .field label{margin-bottom:3px}
 }
 @media (prefers-reduced-motion:reduce){ *{transition:none!important} #nudge i{animation:none} }
-#svc{text-decoration:underline;text-underline-offset:3px;pointer-events:auto}
-#svc:hover{color:var(--fg)}
+.svc-btn{display:inline-flex;gap:14px;align-items:center;justify-content:center;height:44px;margin-top:6px;padding:0 20px;border:1px solid rgba(242,244,247,.5);border-radius:2px;background:rgba(0,0,0,.35);color:#f2f4f7;font:500 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;transition:background .2s,color .2s}
+.svc-btn i{font-style:normal;transition:transform .2s}
+.svc-btn:hover{background:#f2f4f7;color:#000}.svc-btn:hover i{transform:translateX(4px)}
+.accepted .svc-btn{position:relative;top:clamp(70px,12vh,110px)}
+@media (max-width:760px){.svc-btn{display:flex;width:100%;height:42px;margin-top:4px}}
+@media (max-height:540px){.svc-btn{height:32px;margin-top:0}}
