@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Onest:wght@200;300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=9223939884">
+<link rel="stylesheet" href="css/style.css?v=8ec6172bc0">
 <link rel="modulepreload" href="vendor/three.module.min.js">
 <script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
 </head>
@@ -32,83 +32,39 @@
 
 <header id="hud">
   <a class="brand" href="#" data-t-label="backToStart" aria-label="Axioma, back to start"><svg aria-hidden="true"><use href="#mark"/></svg></a>
-  <div class="hud-r">
+  <nav class="hud-r" aria-label="Menu">
+    <a class="menu-link" data-svc href="/en/services/"><span class="long" data-t="svc">Services and prices</span><span class="short" data-t="prices">Prices</span></a>
+    <a id="go-form" class="menu-cta" href="#request"><span class="long" data-t="request">Send a request</span><span class="short" data-t="requestShort">Request</span></a>
     <button id="lang" type="button" data-t-label="language" aria-label="Switch language"><b data-l="en">EN</b><b data-l="ru">RU</b></button>
-    <button id="sound" type="button" aria-pressed="false"><span>Music</span><i></i></button>
-  </div>
+    <button id="sound" type="button" aria-pressed="false" data-t-label="music" aria-label="Music"><span>Music</span><i></i></button>
+  </nav>
 </header>
 
 <main>
-  <section class="beat hero" data-in="-30" data-out="70" data-fade="12">
+  <section class="beat hero" data-in="-30" data-out="58" data-fade="12">
     <h1 aria-label="Axioma"><svg aria-hidden="true"><use href="#mark"/></svg></h1>
     <p class="sub" data-t="heroSub">We build websites people remember.</p>
   </section>
 
-  <section class="beat left mid" data-in="205" data-out="300">
-    <p class="k" data-t="orderK">Structure</p>
-    <h2 data-t="orderH">From a chaos of ideas to a clear structure.</h2>
-  </section>
-  <section class="beat right low" data-in="300" data-out="400">
-    <p class="txt" data-t="orderT">You bring the task. We shape it into a site: pages, meaning and a clear path from the first screen to the request.</p>
-  </section>
-
-  <section class="beat left top" data-in="440" data-out="540">
+  <section class="beat left top" data-in="98" data-out="205" data-fade="14">
     <p class="k" data-t="shipK">Engineering</p>
     <h2 data-t="shipH">Your website is a machine.</h2>
-  </section>
-  <section class="beat right low" data-in="664" data-out="750">
     <p class="txt" data-t="shipT">Every part does a job: pages that load fast, clean code and steady work on any device.</p>
   </section>
 
-  <section class="beat left mid" data-in="800" data-out="890">
-    <p class="k" data-t="originK">Identity</p>
-    <h2 data-t="originH">Every business has its own DNA.</h2>
-  </section>
-  <section class="beat right low" data-in="890" data-out="985">
-    <p class="txt" data-t="originT">No templates. The design grows out of your brand, so nobody else will have a site like yours.</p>
-  </section>
-
-  <section class="beat left mid" data-in="1040" data-out="1130">
-    <p class="k" data-t="energyK">Conversion</p>
-    <h2 data-t="energyH">Visitors are energy.</h2>
-  </section>
-  <section class="beat right low" data-in="1130" data-out="1245">
-    <p class="txt" data-t="energyT">Ads bring people in, and the site turns them into requests. Every block gathers attention the way these panels gather starlight.</p>
-  </section>
-
-  <section class="beat left top" data-in="2060" data-out="2160">
-    <p class="k" data-t="holeK">Attention</p>
-    <h2 data-t="holeH">A site people can’t pull away from.</h2>
-  </section>
-  <section class="beat right top" data-in="2160" data-out="2245">
-    <p class="txt" data-t="holeT">Gravity works online too. A strong first screen draws the visitor in and keeps them to the end.</p>
-  </section>
-
-  <section class="beat left top" data-in="1300" data-out="1380">
+  <section class="beat left top" data-in="218" data-out="314" data-fade="14">
     <p class="k" data-t="scaleK">Visibility</p>
     <h2 data-t="scaleH">Over a billion websites. Yours gets noticed.</h2>
-  </section>
-  <section class="beat right low" data-in="1390" data-out="1495">
     <p class="txt" data-t="scaleT">Search optimisation, speed and a memorable look set you apart from everyone else in your niche.</p>
   </section>
 
-  <section class="beat left mid" data-in="1542" data-out="1640">
-    <p class="k" data-t="worldK">Adaptive</p>
-    <h2 data-t="worldH">One site, any shape.</h2>
-  </section>
-  <section class="beat right top" data-in="1650" data-out="1752">
-    <p class="txt" data-t="worldT">It reshapes itself for a phone, a tablet or a desktop. The form changes, the quality stays.</p>
+  <section class="beat left top" data-in="328" data-out="400" data-fade="14">
+    <p class="k" data-t="holeK">Attention</p>
+    <h2 data-t="holeH">A site people can’t pull away from.</h2>
+    <p class="txt" data-t="holeT">Gravity works online too. A strong first screen draws the visitor in and keeps them to the end.</p>
   </section>
 
-  <section class="beat left mid" data-in="1802" data-out="1900">
-    <p class="k" data-t="moonK">Support</p>
-    <h2 data-t="moonH">We stay after launch.</h2>
-  </section>
-  <section class="beat center" data-in="1912" data-out="2004">
-    <h2 data-t="moonT">Silence after launch means everything just works.</h2>
-  </section>
-
-  <section class="beat apply" data-in="2462" data-out="3400" data-fade="20">
+  <section class="beat apply" data-in="498" data-out="900" data-fade="20">
     <form id="apply" novalidate data-key="60fc50cc-e30a-4f0f-ad9b-0dfa5df84218">
       <input class="trap" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
       <h2 data-t="formH">Your website request</h2>
@@ -122,24 +78,24 @@
       <p id="apply-status" class="status" role="status"></p>
     </form>
     <p id="after" class="after" role="status"></p>
-    <a id="svc" class="svc-btn" href="/en/services/"><span data-t="svc">Services and prices</span><i>→</i></a>
+    <a id="svc" class="svc-btn" data-svc href="/en/services/"><span data-t="svc">Services and prices</span><i>→</i></a>
   </section>
-  <footer class="beat foot" data-in="2480" data-out="3400" data-fade="16">
+  <footer class="beat foot" data-in="505" data-out="900" data-fade="16">
     <span>Axioma</span>
     <span data-t="foot">Every scene and every note is generated in real time</span>
   </footer>
 </main>
 
-<div class="tag3d" data-anchor="reactor" data-in="520" data-out="622"><i></i><p><b>A</b> <span data-t="tagA">Speed</span><small data-t="tagAs">Pages load without the wait</small></p></div>
-<div class="tag3d" data-anchor="habitat" data-in="580" data-out="680"><i></i><p><b>B</b> <span data-t="tagB">Adaptive</span><small data-t="tagBs">Phone, tablet, desktop</small></p></div>
-<div class="tag3d" data-anchor="dish" data-in="640" data-out="745"><i></i><p><b>C</b> <span data-t="tagC">SEO</span><small data-t="tagCs">Search brings clients to you</small></p></div>
-<div class="tag3d" data-anchor="here" data-shot="scale" data-in="1370" data-out="1505"><i></i><p><b>◦</b> <span data-t="tagH">Your website</span><small data-t="tagHs">One in a billion</small></p></div>
+<div class="tag3d" data-anchor="reactor" data-in="128" data-out="170"><i></i><p><b>A</b> <span data-t="tagA">Speed</span><small data-t="tagAs">Pages load without the wait</small></p></div>
+<div class="tag3d" data-anchor="habitat" data-in="150" data-out="190"><i></i><p><b>B</b> <span data-t="tagB">Adaptive</span><small data-t="tagBs">Phone, tablet, desktop</small></p></div>
+<div class="tag3d" data-anchor="dish" data-in="172" data-out="207"><i></i><p><b>C</b> <span data-t="tagC">SEO</span><small data-t="tagCs">Search brings clients to you</small></p></div>
+<div class="tag3d" data-anchor="here" data-shot="scale" data-in="262" data-out="316"><i></i><p><b>◦</b> <span data-t="tagH">Your website</span><small data-t="tagHs">One in a billion</small></p></div>
 
 <div id="card" aria-hidden="true"><span></span></div>
 <div id="nudge" aria-hidden="true"><span data-t="nudge">Scroll down</span><i></i></div>
 <div id="scroll" aria-hidden="true"></div>
 <noscript><p class="msg">This site needs JavaScript and WebGL2.</p></noscript>
 <p class="msg nogl-msg" data-t="noGl">This browser can’t run WebGL2, which Axioma needs. Try a different browser.</p>
-<script type="module" src="app-9223939884.js"></script>
+<script type="module" src="app-8ec6172bc0.js"></script>
 </body>
 </html>

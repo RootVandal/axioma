@@ -103,7 +103,7 @@ vec3 sway(vec3 wp, float reach){
 const DICT = {
   en: {
     title: 'Axioma — websites people remember', desc: 'Axioma designs and builds websites people remember. Send your request and get a site made for your business.',
-    backToStart: 'Axioma, back to start', music: 'Music', musicOn: 'Music on', language: 'Switch language', nudge: 'Scroll', svc: 'Services and prices', loading: 'Loading',
+    backToStart: 'Axioma, back to start', music: 'Music', musicOn: 'Music on', language: 'Switch language', nudge: 'Scroll', svc: 'Services and prices', prices: 'Prices', request: 'Send a request', requestShort: 'Request', loading: 'Loading',
     heroSub: 'We build websites people remember.',
     orderK: 'Structure', orderH: 'From a chaos of ideas to a clear structure.', orderT: 'You bring the task. We shape it into a site: pages, meaning and a clear path from the first screen to the request.',
     shipK: 'Engineering', shipH: 'Your website is a machine.', shipT: 'Every part does a job: pages that load fast, clean code and steady work on any device.',
@@ -122,7 +122,7 @@ const DICT = {
   },
   ru: {
     title: 'Axioma — сайты, которые запоминают', desc: 'Axioma проектирует и создаёт запоминающиеся сайты. Отправьте запрос и получите сайт, сделанный под ваш бизнес.',
-    backToStart: 'Axioma, в начало', music: 'Музыка', musicOn: 'Музыка вкл', language: 'Сменить язык', nudge: 'Листайте', svc: 'Услуги и цены', loading: 'Загрузка',
+    backToStart: 'Axioma, в начало', music: 'Музыка', musicOn: 'Музыка вкл', language: 'Сменить язык', nudge: 'Листайте', svc: 'Услуги и цены', prices: 'Цены', request: 'Оставить заявку', requestShort: 'Заявка', loading: 'Загрузка',
     heroSub: 'Мы создаём сайты, которые запоминают.',
     orderK: 'Структура', orderH: 'Из хаоса идей — чёткая структура.', orderT: 'Вы приносите задачу, мы превращаем её в сайт: страницы, смыслы и понятный путь от первого экрана до заявки.',
     shipK: 'Разработка', shipH: 'Ваш сайт — это машина.', shipT: 'Каждая деталь работает на результат: быстрая загрузка, чистый код и стабильная работа на любом устройстве.',
@@ -152,7 +152,7 @@ const onLang = fn => listeners.push(fn);
 function applyLang() {
   const root = document.documentElement;
   root.lang = lang;
-  document.getElementById('svc').href = lang === 'ru' ? '/services/' : '/en/services/';
+  for (const a of document.querySelectorAll('[data-svc]')) a.href = lang === 'ru' ? '/services/' : '/en/services/';
   document.title = t('title');
   document.querySelector('meta[name=description]').content = t('desc');
   for (const el of document.querySelectorAll('[data-t]')) el.textContent = t(el.dataset.t);
@@ -1800,22 +1800,17 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ------- timeline, in hundredths of a viewport of scroll ------- */
 const SHOTS = [
-  { id: 'hero', a: 0, b: 160 },
-  { id: 'order', a: 160, b: 420 },
-  { id: 'ship', a: 420, b: 760 },
-  { id: 'origin', a: 760, b: 1000 },
-  { id: 'energy', a: 1000, b: 1260 },
-  { id: 'scale', a: 1260, b: 1510 },
-  { id: 'world', a: 1510, b: 1770 },
-  { id: 'moon', a: 1770, b: 2020 },
-  { id: 'hole', a: 2020, b: 2290 },
-  { id: 'end', a: 2290, b: 2600 },
+  { id: 'hero', a: 0, b: 90 },
+  { id: 'ship', a: 90, b: 210 },
+  { id: 'scale', a: 210, b: 320 },
+  { id: 'hole', a: 320, b: 420 },
+  { id: 'end', a: 420, b: 540 },
 ];
-const END = 2600, CUT = 46, BOOT_LEN = 1.9;
+const END = 540, CUT = 30, BOOT_LEN = 1.9;
 const LIGHT = { order: .973, origin: .976, world: .943 };   // background as shown on screen
 const WAIT = { id: 'wait' }, WARP = { id: 'warp' }, NOVA = { id: 'nova' };
 // finale clock, in seconds from the moment the camera crosses the horizon
-const JUMP = 2.7, BOOM = JUMP + 2.5, DONE = BOOM + 3.7, TRIGGER = 2284, REST = 2580;
+const JUMP = 2.7, BOOM = JUMP + 2.5, DONE = BOOM + 3.7, TRIGGER = 414, REST = 520;
 const SITE = {
   hero: new THREE.Vector3(0, 0, 0), order: new THREE.Vector3(600, 0, 0), ship: new THREE.Vector3(1200, 0, 0),
   hole: new THREE.Vector3(1800, 0, 0), world: new THREE.Vector3(2400, 0, 0), moon: new THREE.Vector3(3000, 0, 0),
@@ -1996,6 +1991,7 @@ function boot() {
     group('nova').add(star.group, blast, dust);
     size();
   };
+  for (const k of ['order', 'origin', 'energy', 'world', 'moon']) delete jobs[k];   // scenes the short cut leaves out
   const ready = { hero: true };
   const queue = Object.keys(jobs);
   const needOf = id => (id === 'end' ? 'nova' : id);
@@ -2014,7 +2010,7 @@ function boot() {
       // whatever the visitor is closest to comes first
       const here = y;
       queue.sort((p, r) => {
-        const cost = id => { const d = (id === 'nova' ? 2290 : SHOTS.find(k => k.id === id).a) - here; return d < -40 ? 4000 - d : Math.abs(d); };
+        const cost = id => { const d = (id === 'nova' ? 420 : SHOTS.find(k => k.id === id).a) - here; return d < -40 ? 4000 - d : Math.abs(d); };
         return cost(p) - cost(r);
       });
       const id = queue.shift();
@@ -2054,7 +2050,7 @@ function boot() {
   const HERE = new THREE.Vector3(10.6, .1, 9.1);
   const labels = [...document.querySelectorAll('.tag3d')].map(el => ({ el, a: +el.dataset.in, b: +el.dataset.out, shot: el.dataset.shot || 'ship', anchor: el.dataset.anchor }));
   const scrollBox = $('scroll');
-  const vh = () => scrollBox.offsetHeight / 27 || innerHeight;
+  const vh = () => scrollBox.offsetHeight / ((END + 100) / 100) || innerHeight;   // #scroll is (END + 100)vh tall
   document.querySelector('.brand').addEventListener('click', e => { e.preventDefault(); scrollTo({ top: 0, behavior: 'smooth' }); });
   $('lang').addEventListener('click', toggleLang);
   const sound = new Sound();
@@ -2139,6 +2135,7 @@ function boot() {
   let y = scrollY / vh() * 100, last = performance.now(), T = 0, slowRun = 0, frames = 0, cur_ = null, cardI = -1, cutSeen = -1;
   const v0 = new THREE.Vector3(), v1 = new THREE.Vector3(), tmp = new THREE.Vector3(), sunW = new THREE.Vector3(), qInv = new THREE.Quaternion(), tq = new THREE.Quaternion();
   const card = $('card'), nudge = $('nudge');
+  $('go-form').addEventListener('click', e => { e.preventDefault(); y = REST; scrollTo(0, REST * vh() / 100); });
   let cine = scrollY / vh() * 100 > TRIGGER ? 'done' : 'idle', cineT = 0, lockY = 0, warpPhase = 0, doneT = 0, lastShotEnd = false;
   const stop = e => { e.preventDefault(); };
   const stopKeys = e => { if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'Home', 'End'].includes(e.key)) e.preventDefault(); };
@@ -2205,7 +2202,7 @@ function boot() {
       if (reduced || yT > TRIGGER + 90) cine = 'done';
       else if (ready.nova) { cine = 'play'; cineT = 0; lockY = TRIGGER * vh() / 100; lock(true); sound.finale(JUMP, BOOM); }
     }
-    if (cine === 'done' && y < 2200) cine = 'idle';
+    if (cine === 'done' && y < 360) cine = 'idle';
     if (cine === 'play') {
       cineT += clamp(real, .001, .25);
       scrollTo(0, lockY); y = TRIGGER;
@@ -2377,7 +2374,7 @@ function boot() {
     }
     // first slide: always invite the scroll. Later: only after five quiet seconds
     if (Math.abs(yT - lastY) > .5) { lastY = yT; idleAt = now; }
-    const want = bootV >= 1 && s !== WAIT && cine !== 'play' && shut < .02 && pY < 2270 && (pY < 30 || now - idleAt > 5000);
+    const want = bootV >= 1 && s !== WAIT && cine !== 'play' && shut < .02 && pY < 405 && (pY < 30 || now - idleAt > 5000);
     if (want !== nudged) { nudged = want; nudge.classList.toggle('show', want); }
     for (const l of labels) {
       const v = s.id === l.shot && pY > l.a && pY < l.b;

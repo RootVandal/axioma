@@ -2,7 +2,7 @@
 const DICT = {
   en: {
     title: 'Axioma — websites people remember', desc: 'Axioma designs and builds websites people remember. Send your request and get a site made for your business.',
-    backToStart: 'Axioma, back to start', music: 'Music', musicOn: 'Music on', language: 'Switch language', nudge: 'Scroll', svc: 'Services and prices', loading: 'Loading',
+    backToStart: 'Axioma, back to start', music: 'Music', musicOn: 'Music on', language: 'Switch language', nudge: 'Scroll', svc: 'Services and prices', prices: 'Prices', request: 'Send a request', requestShort: 'Request', loading: 'Loading',
     heroSub: 'We build websites people remember.',
     orderK: 'Structure', orderH: 'From a chaos of ideas to a clear structure.', orderT: 'You bring the task. We shape it into a site: pages, meaning and a clear path from the first screen to the request.',
     shipK: 'Engineering', shipH: 'Your website is a machine.', shipT: 'Every part does a job: pages that load fast, clean code and steady work on any device.',
@@ -21,7 +21,7 @@ const DICT = {
   },
   ru: {
     title: 'Axioma — сайты, которые запоминают', desc: 'Axioma проектирует и создаёт запоминающиеся сайты. Отправьте запрос и получите сайт, сделанный под ваш бизнес.',
-    backToStart: 'Axioma, в начало', music: 'Музыка', musicOn: 'Музыка вкл', language: 'Сменить язык', nudge: 'Листайте', svc: 'Услуги и цены', loading: 'Загрузка',
+    backToStart: 'Axioma, в начало', music: 'Музыка', musicOn: 'Музыка вкл', language: 'Сменить язык', nudge: 'Листайте', svc: 'Услуги и цены', prices: 'Цены', request: 'Оставить заявку', requestShort: 'Заявка', loading: 'Загрузка',
     heroSub: 'Мы создаём сайты, которые запоминают.',
     orderK: 'Структура', orderH: 'Из хаоса идей — чёткая структура.', orderT: 'Вы приносите задачу, мы превращаем её в сайт: страницы, смыслы и понятный путь от первого экрана до заявки.',
     shipK: 'Разработка', shipH: 'Ваш сайт — это машина.', shipT: 'Каждая деталь работает на результат: быстрая загрузка, чистый код и стабильная работа на любом устройстве.',
@@ -51,7 +51,7 @@ export const onLang = fn => listeners.push(fn);
 export function applyLang() {
   const root = document.documentElement;
   root.lang = lang;
-  document.getElementById('svc').href = lang === 'ru' ? '/services/' : '/en/services/';
+  for (const a of document.querySelectorAll('[data-svc]')) a.href = lang === 'ru' ? '/services/' : '/en/services/';
   document.title = t('title');
   document.querySelector('meta[name=description]').content = t('desc');
   for (const el of document.querySelectorAll('[data-t]')) el.textContent = t(el.dataset.t);
