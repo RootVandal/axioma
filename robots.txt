@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://axioma.codes/sitemap.xml
