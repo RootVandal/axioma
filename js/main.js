@@ -201,6 +201,16 @@ function boot() {
   const ready = { hero: true };
   const queue = Object.keys(jobs);
   const needOf = id => (id === 'end' ? 'hole' : id);
+  /** Compiles a scene's real shader variants off-screen. Lights must be on here, or the programs
+   *  would not match and the browser would stall recompiling them the moment the scene appears. */
+  async function prepare(id) {
+    const g = world[id], lit = id === 'ship' ? sun : null;
+    g.visible = true; if (lit) lit.visible = true;
+    const jobsDone = [renderer.compileAsync(g, camera, scene)];
+    if (id === 'hole') { hole.mesh.visible = true; jobsDone.push(renderer.compileAsync(hole.mesh, camera, scene)); hole.mesh.visible = false; }
+    g.visible = false; if (lit) lit.visible = false;
+    try { await Promise.all(jobsDone); } catch { /* falls back to compiling on first draw */ }
+  }
   async function buildAll() {
     while (queue.length) {
       // whatever the visitor is closest to comes first
@@ -211,7 +221,7 @@ function boot() {
       });
       const id = queue.shift();
       await jobs[id]();
-      try { await renderer.compileAsync(world[id], camera, scene); } catch { /* compiled on first draw instead */ }
+      await prepare(id);
       ready[id] = true;
       await new Promise(r => setTimeout(r, 30));
     }
@@ -325,7 +335,7 @@ function boot() {
   if (skip) { post.c.uCRT.value = 0; document.documentElement.classList.add('live'); }
   document.documentElement.classList.add('ready');
 
-  let y = scrollY / vh() * 100, last = performance.now(), T = 0, slow = .016, frames = 0, cur_ = null, cardI = -1, cutSeen = -1;
+  let y = scrollY / vh() * 100, last = performance.now(), T = 0, slowRun = 0, frames = 0, cur_ = null, cardI = -1, cutSeen = -1;
   const v0 = new THREE.Vector3(), v1 = new THREE.Vector3(), tmp = new THREE.Vector3(), sunW = new THREE.Vector3(), qInv = new THREE.Quaternion(), tq = new THREE.Quaternion();
   const card = $('card'), nudge = $('nudge');
   let lastY = y, idleAt = performance.now(), nudged = false;
@@ -361,8 +371,8 @@ function boot() {
     fit(now);
     camera.aspect = innerWidth / Math.max(innerHeight, 1);
     if (!params.get('q')) {
-      slow = lerp(slow, dt, .05);
-      if (frames > 80 && slow > .027 && scale > .6) { scale = Math.max(.6, scale * .84); size(); frames = 0; slow = .016; }
+      slowRun = real > .03 && real < .2 ? slowRun + 1 : Math.max(0, slowRun - 2);
+      if (!queue.length && frames > 80 && slowRun > 50 && scale > .6) { scale = Math.max(.6, scale * .84); size(); frames = 0; slowRun = 0; }
     }
 
     const yT = scrollY / vh() * 100;
@@ -530,7 +540,7 @@ function boot() {
     post.render(scene, camera);
   }
 
-  if (params.has('debug')) window.__ax = { ready, jump(v) { y = v; scrollTo(0, v * vh() / 100); }, get state() { return { y, yT: scrollY / vh() * 100, lastY, idle: performance.now() - idleAt, scale, frames, bootT, shut: post.c.uShut.value, shot: cur_?.id, nudged, res: [...post.c.uRes.value], reloaded: memo('axioma-reloaded'), lite: memo('axioma-lite') }; } };
+  if (params.has('debug')) window.__ax = { ready, jump(v) { y = v; scrollTo(0, v * vh() / 100); }, get state() { return { shot: cur_?.id, scale, programs: renderer.info.programs.length }; } };
   drawTerm(0);
   requestAnimationFrame(frame);
   setTimeout(buildAll, 60);
