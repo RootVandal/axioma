@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-6p13ug9Y/2TWPZMF0aIT0xv2TqxNkp62hhuZFDN2uAM='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://api.web3forms.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Axioma — what needs no proof</title>
+<meta name="description" content="Axioma builds websites like this one. Scroll through nine scenes generated live in your browser, then send your request.">
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Axioma">
+<meta property="og:description" content="Nine scenes generated live in your browser.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M7 25 16 7l9 18' fill='none' stroke='%23fff' stroke-width='2.4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Onest:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="modulepreload" href="vendor/three.module.min.js">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+</head>
+<body data-shot="hero" data-tone="dark">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="-8 0 926 160"><path d="M0 150 L65 10 L130 150 M174 10 L304 150 M304 10 L174 150 M368 10 V150 M412 80 a70 70 0 1 0 140 0 a70 70 0 1 0 -140 0 M596 150 V10 L666 112 L736 10 V150 M780 150 L845 10 L910 150" fill="none" stroke="currentColor" stroke-width="13"/></symbol>
+</svg>
+
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<header id="hud">
+  <a class="brand" href="#" data-t-label="backToStart" aria-label="Axioma, back to start"><svg aria-hidden="true"><use href="#mark"/></svg></a>
+  <div class="hud-r">
+    <button id="lang" type="button" data-t-label="language" aria-label="Switch language"><b data-l="en">EN</b><b data-l="ru">RU</b></button>
+    <button id="sound" type="button" aria-pressed="false"><span>Music</span><i></i></button>
+  </div>
+</header>
+
+<main>
+  <section class="beat hero" data-in="-30" data-out="70" data-fade="12">
+    <h1 aria-label="Axioma"><svg aria-hidden="true"><use href="#mark"/></svg></h1>
+    <p class="sub" data-t="heroSub">What needs no proof.</p>
+  </section>
+
+  <section class="beat left mid" data-in="205" data-out="300">
+    <p class="k" data-t="orderK">Order</p>
+    <h2 data-t="orderH">Even chaos follows a rule.</h2>
+  </section>
+  <section class="beat right low" data-in="300" data-out="400">
+    <p class="txt" data-t="orderT">Three equations. One path that never repeats and never leaves its shape.</p>
+    <p class="eq">dx/dt = σ(y − x)<br>dy/dt = x(ρ − z) − y<br>dz/dt = xy − βz</p>
+  </section>
+
+  <section class="beat left top" data-in="440" data-out="540">
+    <p class="k" data-t="shipK">Machine</p>
+    <h2 data-t="shipH">What can be built, eventually will be.</h2>
+  </section>
+  <section class="beat right low" data-in="664" data-out="750">
+    <p class="txt" data-t="shipT">AX-1. Forty metres of chrome, one tokamak and a crew that won’t be back for two hundred years.</p>
+  </section>
+
+  <section class="beat left mid" data-in="800" data-out="890">
+    <p class="k" data-t="originK">Origin</p>
+    <h2 data-t="originH">Everything that lives was written first.</h2>
+  </section>
+  <section class="beat right low" data-in="890" data-out="985">
+    <p class="txt" data-t="originT">Four letters and three billion lines.</p>
+  </section>
+
+  <section class="beat left mid" data-in="1040" data-out="1130">
+    <p class="k" data-t="energyK">Energy</p>
+    <h2 data-t="energyH">Nothing shines for free.</h2>
+  </section>
+  <section class="beat right low" data-in="1130" data-out="1245">
+    <p class="txt" data-t="energyT">Nine thousand panels close around one star.</p>
+  </section>
+
+  <section class="beat left top" data-in="1300" data-out="1400">
+    <p class="k" data-t="holeK">Boundary</p>
+    <h2 data-t="holeH">Past the horizon, proof runs out.</h2>
+  </section>
+  <section class="beat right top" data-in="1400" data-out="1485">
+    <p class="txt" data-t="holeT">Light from the far side of the disc bends over the shadow.</p>
+  </section>
+
+  <section class="beat left top" data-in="1570" data-out="1650">
+    <p class="k" data-t="scaleK">Scale</p>
+    <h2 data-t="scaleH">Two hundred billion suns.</h2>
+  </section>
+  <section class="beat right low" data-in="1660" data-out="1765">
+    <p class="txt" data-t="scaleT">One slow rotation takes a quarter of a billion years.</p>
+  </section>
+
+  <section class="beat left mid" data-in="1812" data-out="1910">
+    <p class="k" data-t="worldK">Continuity</p>
+    <h2 data-t="worldH">Any world can be unwound.</h2>
+  </section>
+  <section class="beat right top" data-in="1920" data-out="2022">
+    <p class="txt" data-t="worldT">Oceans, mountains and clouds become a single ribbon.</p>
+  </section>
+
+  <section class="beat left mid" data-in="2072" data-out="2170">
+    <p class="k" data-t="moonK">Silence</p>
+    <h2 data-t="moonH">The far side has no signal.</h2>
+  </section>
+  <section class="beat center" data-in="2182" data-out="2274">
+    <h2 data-t="moonT">Everything we know begins with an assumption.</h2>
+  </section>
+
+  <section class="beat apply" data-in="2462" data-out="3400" data-fade="20">
+    <form id="apply" novalidate data-key="60fc50cc-e30a-4f0f-ad9b-0dfa5df84218">
+      <input class="trap" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <h2 data-t="formH">Your website request</h2>
+      <div class="row">
+        <div class="field"><label for="f-name" data-t="name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" maxlength="80" required><span class="err" role="alert"></span></div>
+        <div class="field"><label for="f-phone" data-t="phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="24" required><span class="err" role="alert"></span></div>
+        <div class="field"><label for="f-email" data-t="email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required><span class="err" role="alert"></span></div>
+        <button type="submit"><span data-t="send">Send request</span><i>→</i></button>
+      </div>
+      <p id="apply-status" class="status" role="status"></p>
+    </form>
+    <p id="after" class="after" role="status"></p>
+  </section>
+  <footer class="beat foot" data-in="2480" data-out="3400" data-fade="16">
+    <span>Axioma</span>
+    <span data-t="foot">Every scene and every note is generated in real time</span>
+  </footer>
+</main>
+
+<div class="tag3d" data-anchor="reactor" data-in="520" data-out="622"><i></i><p><b>A</b> <span data-t="tagA">Tokamak</span><small data-t="tagAs">41.7 MK · 24 coils</small></p></div>
+<div class="tag3d" data-anchor="habitat" data-in="580" data-out="680"><i></i><p><b>B</b> <span data-t="tagB">Habitat ring</span><small data-t="tagBs">0.8 g · 412 berths</small></p></div>
+<div class="tag3d" data-anchor="dish" data-in="640" data-out="745"><i></i><p><b>C</b> <span data-t="tagC">Antenna</span><small data-t="tagCs">4.2-year signal delay</small></p></div>
+<div class="tag3d" data-anchor="here" data-shot="scale" data-in="1640" data-out="1775"><i></i><p><b>◦</b> <span data-t="tagH">You are here</span><small data-t="tagHs">Orion Arm, 26 kly out</small></p></div>
+
+<div id="card" aria-hidden="true"><span></span></div>
+<div id="nudge" aria-hidden="true"><span data-t="nudge">Scroll down</span><i></i></div>
+<div id="scroll" aria-hidden="true"></div>
+<noscript><p class="msg">This site needs JavaScript and WebGL2.</p></noscript>
+<p class="msg nogl-msg" data-t="noGl">This browser can’t run WebGL2, which Axioma needs. Try a different browser.</p>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
