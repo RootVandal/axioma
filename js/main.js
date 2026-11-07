@@ -63,7 +63,13 @@ function boot() {
   // software renderers and phones get lighter bakes and fewer particles
   const gl = renderer.getContext(), dbg = gl.getExtension('WEBGL_debug_renderer_info');
   const gpu = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : '';
-  const soft = /swiftshader|llvmpipe|software|basic render/i.test(gpu);
+  const memo = (k, v) => { try { if (v !== undefined) sessionStorage.setItem(k, v); return sessionStorage.getItem(k); } catch { return null; } };
+  const soft = /swiftshader|llvmpipe|software|basic render/i.test(gpu) || memo('axioma-lite') === '1';
+  canvas.addEventListener('webglcontextlost', e => {
+    e.preventDefault();
+    memo('axioma-lite', '1');
+    if (memo('axioma-reloaded') !== '1') { memo('axioma-reloaded', '1'); location.reload(); }
+  });
   const low = mobile || soft;
   renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
   renderer.toneMapping = THREE.NoToneMapping;
@@ -101,10 +107,9 @@ function boot() {
   let scale = params.get('q') ? +params.get('q') : Math.min(devicePixelRatio || 1, soft ? .7 : mobile ? 1.3 : 1.5);
   let hole = null, stars = null, galaxy = null;
   const size = () => {
-    const w = Math.round(innerWidth * scale), h = Math.round(innerHeight * scale);
+    const w = Math.max(2, Math.round(innerWidth * scale)), h = Math.max(2, Math.round(innerHeight * scale));
     renderer.setPixelRatio(1); renderer.setSize(w, h, false); post.setSize(w, h);
-    camera.aspect = innerWidth / innerHeight;
-    if (hole) hole.mesh.userData.u.uAspect.value = camera.aspect;
+    if (hole) hole.mesh.userData.u.uAspect.value = innerWidth / Math.max(innerHeight, 1);
     if (stars) stars.userData.u.uPx.value = Math.max(1, h / 720) * 1.5;
     if (galaxy) galaxy.userData.u.uPx.value = h / 720;
   };
@@ -238,7 +243,8 @@ function boot() {
   const $ = id => document.getElementById(id);
   const HERE = new THREE.Vector3(10.6, .1, 9.1);
   const labels = [...document.querySelectorAll('.tag3d')].map(el => ({ el, a: +el.dataset.in, b: +el.dataset.out, shot: el.dataset.shot || 'ship', anchor: el.dataset.anchor }));
-  const vh = () => innerHeight;
+  const scrollBox = $('scroll');
+  const vh = () => scrollBox.offsetHeight / 27 || innerHeight;
   document.querySelector('.brand').addEventListener('click', e => { e.preventDefault(); scrollTo({ top: 0, behavior: 'smooth' }); });
   $('lang').addEventListener('click', toggleLang);
   const sound = new Sound();
@@ -302,12 +308,16 @@ function boot() {
   let mx = 0, my = 0, mxs = 0, mys = 0;
   addEventListener('pointermove', e => { mx = e.clientX / innerWidth * 2 - 1; my = e.clientY / innerHeight * 2 - 1; }, { passive: true });
 
-  // a phone keyboard changes only the height: ignore that, or the page would reflow under the form
-  let rsz, lastW = innerWidth;
-  addEventListener('resize', () => {
-    if (mobile && innerWidth === lastW) return;
-    lastW = innerWidth; clearTimeout(rsz); rsz = setTimeout(size, 120);
-  });
+  // The buffers follow the real window, checked every frame. This also rescues a page opened before
+  // it had any size. A phone's address bar and keyboard change the height a little: those are ignored,
+  // because rebuilding the buffers mid-scroll would stutter.
+  let nextFit = 0;
+  const fit = now => {
+    const w = Math.round(innerWidth * scale), h = Math.round(innerHeight * scale), r = post.c.uRes.value;
+    if (!w || !h || now < nextFit) return;
+    if (document.activeElement?.tagName === 'INPUT') return;
+    if (r.x !== w || Math.abs(r.y - h) > r.y * .25 || (!mobile && r.y !== h)) { nextFit = now + 150; size(); }
+  };
 
   /* ------- run ------- */
   const skip = reduced || scrollY > 40 || params.has('skip');
@@ -348,6 +358,8 @@ function boot() {
     const real = (now - last) / 1000, dt = clamp(real, .001, .05); last = now; T += dt;
 
     frames++;
+    fit(now);
+    camera.aspect = innerWidth / Math.max(innerHeight, 1);
     if (!params.get('q')) {
       slow = lerp(slow, dt, .05);
       if (frames > 80 && slow > .027 && scale > .6) { scale = Math.max(.6, scale * .84); size(); frames = 0; slow = .016; }
@@ -518,7 +530,7 @@ function boot() {
     post.render(scene, camera);
   }
 
-  if (params.has('debug')) window.__ax = { ready, jump(v) { y = v; scrollTo(0, v * vh() / 100); } };
+  if (params.has('debug')) window.__ax = { ready, jump(v) { y = v; scrollTo(0, v * vh() / 100); }, get state() { return { y, yT: scrollY / vh() * 100, lastY, idle: performance.now() - idleAt, scale, frames, bootT, shut: post.c.uShut.value, shot: cur_?.id, nudged, res: [...post.c.uRes.value], reloaded: memo('axioma-reloaded'), lite: memo('axioma-lite') }; } };
   drawTerm(0);
   requestAnimationFrame(frame);
   setTimeout(buildAll, 60);

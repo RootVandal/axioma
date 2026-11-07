@@ -2,7 +2,7 @@
 const DICT = {
   en: {
     title: 'Axioma — what needs no proof', desc: 'Axioma builds websites like this one. Scroll through nine scenes generated live in your browser, then send your request.',
-    backToStart: 'Axioma, back to start', music: 'Music', musicOn: 'Music on', language: 'Switch language', nudge: 'Scroll down', loading: 'Loading',
+    backToStart: 'Axioma, back to start', music: 'Music', musicOn: 'Music on', language: 'Switch language', nudge: 'Scroll', loading: 'Loading',
     heroSub: 'What needs no proof.',
     orderK: 'Order', orderH: 'Even chaos follows a rule.', orderT: 'Three equations. One path that never repeats and never leaves its shape.',
     shipK: 'Machine', shipH: 'What can be built, eventually will be.', shipT: 'AX-1. Forty metres of chrome, one tokamak and a crew that won’t be back for two hundred years.',
@@ -21,7 +21,7 @@ const DICT = {
   },
   ru: {
     title: 'Axioma — то, что не требует доказательств', desc: 'Axioma создаёт такие сайты. Пролистайте девять сцен, которые рождаются прямо в браузере, и отправьте запрос.',
-    backToStart: 'Axioma, в начало', music: 'Музыка', musicOn: 'Музыка вкл', language: 'Сменить язык', nudge: 'Листайте вниз', loading: 'Загрузка',
+    backToStart: 'Axioma, в начало', music: 'Музыка', musicOn: 'Музыка вкл', language: 'Сменить язык', nudge: 'Листайте', loading: 'Загрузка',
     heroSub: 'То, что не требует доказательств.',
     orderK: 'Порядок', orderH: 'Даже хаос следует правилу.', orderT: 'Три уравнения. Одна траектория, которая никогда не повторяется и никогда не покидает своей формы.',
     shipK: 'Машина', shipH: 'Всё, что возможно, однажды построят.', shipT: 'АКС-1. Сорок метров хрома, один токамак и экипаж, который не вернётся раньше, чем через двести лет.',
