@@ -133,3 +133,5 @@ noscript .msg{display:block}
   .field label{margin-bottom:3px}
 }
 @media (prefers-reduced-motion:reduce){ *{transition:none!important} #nudge i{animation:none} }
+#svc{text-decoration:underline;text-underline-offset:3px;pointer-events:auto}
+#svc:hover{color:var(--fg)}

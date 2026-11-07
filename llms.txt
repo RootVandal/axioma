@@ -1,0 +1,11 @@
+# Axioma
+
+> Website design and development studio based in Almaty, Kazakhstan. Works with clients across Kazakhstan, the CIS and worldwide.
+
+- Services: custom websites of any kind, including landing pages, online stores, business sites, portfolios and 3D sites.
+- Price: from 12,000 KZT (about $27). Complex projects are priced individually.
+- Contact: the request form at https://axioma.codes/?lang=en#request
+
+## Pages
+- [Services and prices (English)](https://axioma.codes/en/services/)
+- [Услуги и цены (русский)](https://axioma.codes/services/)

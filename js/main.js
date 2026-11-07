@@ -347,6 +347,7 @@ function boot() {
   };
 
   /* ------- run ------- */
+  if (location.hash === '#request') scrollTo(0, REST * vh() / 100);   // the services pages link straight to the form
   const skip = reduced || scrollY > 40 || params.has('skip');
   let bootT = skip ? 99 : 0;
   if (skip) { post.c.uCRT.value = 0; document.documentElement.classList.add('live'); }
