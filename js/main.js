@@ -290,9 +290,10 @@ function boot() {
     name: v => (v.trim().length >= 2 ? '' : t('errName')),
     phone: v => (/^[+]?[0-9 ()-]{7,20}$/.test(v.trim()) && v.replace(/[^0-9]/g, '').length >= 7 ? '' : t('errPhone')),
     email: v => (/^[^@ ]+@[^@ ]+[.][^@ ]{2,}$/.test(v.trim()) ? '' : t('errEmail')),
+    consent: (v, i) => (i.checked ? '' : t('errConsent')),
   };
   const check = i => {
-    const msg = rules[i.name](i.value), f = i.closest('.field');
+    const msg = rules[i.name](i.value, i), f = i.closest('.field');
     f.classList.toggle('bad', !!msg); f.querySelector('.err').textContent = msg;
     i.setAttribute('aria-invalid', !!msg);
     return !msg;
@@ -306,7 +307,8 @@ function boot() {
     const inputs = [...form.querySelectorAll('input[required]')];
     const bad = inputs.filter(i => !check(i));
     if (bad.length) { bad[0].focus(); return; }
-    const data = Object.fromEntries(inputs.map(i => [i.name, i.value.trim()]));
+    const data = Object.fromEntries(inputs.filter(i => i.name !== 'consent').map(i => [i.name, i.value.trim()]));
+    data.consent = 'yes';
     const trap = form.elements.botcheck.checked;     // hidden from people, ticked only by bots
     const key = form.dataset.key, btn = form.querySelector('button');
     if (key && !trap) {

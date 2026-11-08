@@ -155,3 +155,11 @@ body[data-tone=light] .menu-cta{background:#0a0c10;color:#fff}
   #lang{padding:0 4px}
   .menu-cta{padding:0 10px}
 }
+.consent{grid-column:1/-1;max-width:1040px;margin:4px auto 0;text-align:left}
+.consent label{display:block;position:relative;padding-left:26px;font:300 13px/1.4 var(--sans);color:var(--dim);letter-spacing:0;text-transform:none;margin:0;cursor:pointer}
+.consent input{appearance:auto;position:absolute;left:0;top:1px;width:16px;height:16px;margin:0;accent-color:#f2f4f7}
+.consent a{color:var(--fg);text-decoration:underline;text-underline-offset:3px}
+.consent .err{margin-top:2px}
+.links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.links .svc-btn{margin-top:6px}
+@media (max-width:760px){.links{flex-direction:column;gap:0}.links .svc-btn{margin-top:6px}}

@@ -17,3 +17,23 @@ li{margin:7px 0}
 .cta{display:inline-block;margin:26px 0 8px;padding:14px 22px;background:#f2f4f7;color:#000;border-radius:2px;font:500 12px/1 "JetBrains Mono",ui-monospace,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase;text-decoration:none}
 footer{margin-top:64px;padding-bottom:32px;border-top:1px solid var(--line);padding-top:18px;font-size:14px;color:var(--dim)}
 :focus-visible{outline:1px solid #f2f4f7;outline-offset:3px}
+
+.packs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0 8px}
+.pack{border:1px solid var(--line);border-radius:4px;padding:22px 20px;display:flex;flex-direction:column}
+.pack h3{margin:0 0 10px;font-size:20px;font-weight:400}
+.pack .p-main{display:block;font-size:30px;font-weight:300;color:var(--fg);line-height:1.15}
+.pack .p-alt{display:block;font-size:14px;color:var(--dim);margin:4px 0 14px}
+.pack ul{margin:0;padding-left:18px;font-size:15px}
+.pack.hot{border-color:rgba(242,196,78,.6)}
+.custom{margin-top:14px;padding:18px 20px;border:1px dashed var(--line);border-radius:4px}
+.ctas{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 8px}
+.cta.tg{background:none;color:var(--fg);border:1px solid rgba(242,244,247,.5)}
+.ex{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}
+.ex a{display:block;padding:16px 18px;border:1px solid var(--line);border-radius:4px;text-decoration:none}
+.ex a:hover{border-color:var(--fg)}
+.ex small{display:block;color:var(--dim);font-size:14px}
+.legal h2{font-size:22px;margin:34px 0 10px}
+.legal p,.legal li{font-size:16px}
+@media (max-width:760px){.packs,.ex{grid-template-columns:1fr}}
+.note{font-size:14px;margin-top:10px}
+@media (max-width:760px){.legal h1{font-size:clamp(28px,8.4vw,48px)}}
