@@ -1807,7 +1807,7 @@ const SHOTS = [
   { id: 'hole', a: 320, b: 420 },
   { id: 'end', a: 420, b: 540 },
 ];
-const END = 540, CUT = 30, BOOT_LEN = 1.9;
+const END = 540, CUT = 30;
 const LIGHT = { order: .973, origin: .976, world: .943 };   // background as shown on screen
 const WAIT = { id: 'wait' }, WARP = { id: 'warp' }, NOVA = { id: 'nova' };
 // finale clock, in seconds from the moment the camera crosses the horizon
@@ -1817,24 +1817,6 @@ const SITE = {
   hole: new THREE.Vector3(1800, 0, 0), world: new THREE.Vector3(2400, 0, 0), moon: new THREE.Vector3(3000, 0, 0),
   origin: new THREE.Vector3(3600, 0, 0), energy: new THREE.Vector3(4200, 0, 0), scale: new THREE.Vector3(4800, 0, 0), nova: new THREE.Vector3(5400, 0, 0),
 };
-
-const BOOT = [
-  ['AXIOMA OS  v6.0.1', 0],
-  ['(C) 2187 AXIOMA DEEP FIELD PROGRAMME', 0],
-  ['', 0],
-  ['MEM  1048576 PB ............................ OK', 1],
-  ['SENSOR ARRAY ............................... OK', 1],
-  ['TOKAMAK CORE ............................... 41.7 MK', 1],
-  ['', 0],
-  ['> load axioms --all', 2],
-  ['  [01] structure .... accepted     [05] attention .... accepted', 1],
-  ['  [02] engineering .. accepted     [06] visibility ... accepted', 1],
-  ['  [03] identity ..... accepted     [07] adaptive ..... accepted', 1],
-  ['  [04] conversion ... accepted     [08] support ...... accepted', 1],
-  ['', 0],
-  ['> build website', 2],
-  ['  ready.', 3],
-];
 
 function boot() {
   try { if (top !== self) top.location.replace(location.href); } catch { /* a foreign frame: stay put */ }
@@ -1864,28 +1846,6 @@ function boot() {
   scene.background = new THREE.Color(0, 0, 0);
   const camera = new THREE.PerspectiveCamera(32, 1, .1, 3400);
   const post = new Post(renderer, { samples: low ? 0 : 4 });
-
-  /* ------- terminal drawn to a texture, so it passes through the CRT shader ------- */
-  const tc = document.createElement('canvas'); tc.width = 1280; tc.height = 800;
-  const tx = tc.getContext('2d');
-  const crt = new THREE.CanvasTexture(tc); post.c.tCRT.value = crt; post.c.uCRT.value = reduced ? 0 : 1;
-  const mono = '"JetBrains Mono", Consolas, "Courier New", monospace';
-  const drawTerm = t => {
-    tx.fillStyle = '#000'; tx.fillRect(0, 0, 1280, 800);
-    tx.font = `26px ${mono}`; tx.textBaseline = 'top';
-    tx.shadowColor = '#7dffb0'; tx.shadowBlur = 10; tx.fillStyle = '#c9ffe0';
-    const left = 96, lh = 37;
-    let tt = t * 125, y = 74;
-    for (const [line, kind] of BOOT) {
-      if (tt <= 0) break;
-      const n = kind === 2 ? Math.min(line.length, Math.floor(tt)) : line.length;
-      tx.fillText(line.slice(0, n), left, y);
-      tt -= kind === 2 ? line.length + 10 : kind === 3 ? 26 : kind === 1 ? 6 : 2;
-      y += lh;
-    }
-    if (Math.floor(t * 4) % 2 === 0) tx.fillRect(left, y + 4, 15, 28);
-    crt.needsUpdate = true;
-  };
 
   let scale = params.get('q') ? +params.get('q') : Math.min(devicePixelRatio || 1, soft ? .7 : mobile ? 1.3 : 1.5);
   let hole = null, stars = null, galaxy = null, dustU = null;
@@ -2130,9 +2090,8 @@ function boot() {
 
   /* ------- run ------- */
   if (location.hash === '#request') scrollTo(0, REST * vh() / 100);   // the services pages link straight to the form
-  const skip = reduced || scrollY > 40 || params.has('skip');
-  let bootT = skip ? 99 : 0;
-  if (skip) { post.c.uCRT.value = 0; document.documentElement.classList.add('live'); }
+  let bootT = reduced || scrollY > 40 ? 99 : 0;   // the first words simply fade in
+  post.c.uCRT.value = 0; document.documentElement.classList.add('live');
   document.documentElement.classList.add('ready');
 
   let y = scrollY / vh() * 100, last = performance.now(), T = 0, slowRun = 0, frames = 0, cur_ = null, cardI = -1, cutSeen = -1;
@@ -2188,17 +2147,8 @@ function boot() {
     if (Math.abs(yT - y) > 500) y = yT;
     mxs += (mx - mxs) * (1 - Math.exp(-dt * 3)); mys += (my - mys) * (1 - Math.exp(-dt * 3));
 
-    /* boot terminal: powers down into a line, as old monitors did */
     let shut = 0, fill = 0;
-    if (bootT < 9) {
-      if (scrollY > 80 && bootT < BOOT_LEN) bootT = BOOT_LEN;
-      bootT += clamp(real, .001, 1);   // wall clock, so background building never slows the opening
-      if (bootT < BOOT_LEN + .2) drawTerm(bootT);
-      const a = sstep(BOOT_LEN, BOOT_LEN + .55, bootT), o = sstep(BOOT_LEN + .7, BOOT_LEN + 1.5, bootT);
-      if (!reduced) shut = a * (1 - o);
-      if (bootT >= BOOT_LEN + .6) { post.c.uCRT.value = 0; document.documentElement.classList.add('live'); }
-      if (bootT > BOOT_LEN + 1.6) bootT = 99;
-    }
+    if (bootT < 9) { bootT += clamp(real, .001, 1); if (bootT > 1.2) bootT = 99; }
 
     /* the finale takes over from scrolling once the camera crosses the horizon */
     if (cine === 'idle' && y >= TRIGGER) {
@@ -2364,7 +2314,7 @@ function boot() {
     }
 
     /* HUD */
-    const bootV = bootT > 9 ? 1 : sstep(BOOT_LEN + .6, BOOT_LEN + 1.3, bootT);
+    const bootV = bootT > 9 ? 1 : sstep(.1, .9, bootT);
     for (const b of beats) {
       const up = sstep(b.a, b.a + b.f, pY), out = 1 - sstep(b.b - b.f, b.b, pY);
       const v = Math.round(up * out * bootV * (s === WAIT || cine === 'play' ? 0 : 1) * 200) / 200;
@@ -2394,7 +2344,6 @@ function boot() {
   }
 
   if (params.has('debug')) window.__ax = { ready, finale() { return { cine, cineT }; }, jump(v) { y = v; scrollTo(0, v * vh() / 100); }, get state() { return { shot: cur_?.id, scale, programs: renderer.info.programs.length }; } };
-  drawTerm(0);
   requestAnimationFrame(frame);
   setTimeout(buildAll, 60);
 }
