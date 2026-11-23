@@ -10,14 +10,14 @@ const fine = matchMedia('(pointer: fine)').matches;
 function starfield() {
   const cv = document.getElementById('stars'), cx = cv.getContext('2d');
   let w = 0, h = 0, dpr = 1, stars = [], shoot = null, nextShoot = 2500;
-  const tints = ['255,255,255', '255,236,200', '200,215,255', '255,210,235'];
+  const tints = ['255,255,255', '255,255,255', '255,244,224', '220,228,255'];
   const make = () => {
     dpr = Math.min(devicePixelRatio || 1, 2); w = innerWidth; h = innerHeight;
     cv.width = w * dpr; cv.height = h * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const n = Math.min(420, Math.round(w * h / 4200));
+    const n = Math.min(340, Math.round(w * h / 5200));
     stars = Array.from({ length: n }, () => {
       const z = Math.random();
-      return { x: Math.random() * w, y: Math.random() * h, z, r: .35 + z * z * 1.5, a: .25 + z * .6,
+      return { x: Math.random() * w, y: Math.random() * h, z, r: .3 + z * z * 1.2, a: .2 + z * .55,
                tw: Math.random() * 6.28, sp: .6 + Math.random() * 1.8, c: tints[Math.random() * 4 | 0] };
     });
   };
@@ -38,13 +38,13 @@ function starfield() {
       nextShoot -= dt;
       if (!shoot && nextShoot < 0) {
         shoot = { x: Math.random() * w * .8 + w * .2, y: Math.random() * h * .4, t: 0, len: 120 + Math.random() * 120 };
-        nextShoot = 5000 + Math.random() * 7000;
+        nextShoot = 9000 + Math.random() * 9000;
       }
       if (shoot) {
         shoot.t += dt / 900;
         const p = shoot.t, x = shoot.x - p * 520, y = shoot.y + p * 260, fade = Math.sin(Math.min(p, 1) * Math.PI);
         const g = cx.createLinearGradient(x, y, x + shoot.len, y - shoot.len / 2);
-        g.addColorStop(0, `rgba(255,255,255,${.9 * fade})`); g.addColorStop(1, 'rgba(255,255,255,0)');
+        g.addColorStop(0, `rgba(255,255,255,${.7 * fade})`); g.addColorStop(1, 'rgba(255,255,255,0)');
         cx.strokeStyle = g; cx.lineWidth = 1.6; cx.beginPath(); cx.moveTo(x, y); cx.lineTo(x + shoot.len, y - shoot.len / 2); cx.stroke();
         if (p >= 1) shoot = null;
       }

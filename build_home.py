@@ -148,7 +148,7 @@ def page(lang):
     proc = ''.join(f'<li class="reveal"><span class="num">0{i + 1}</span><h3>{e(a)}</h3><p>{e(b)}</p></li>' for i, (a, b) in enumerate(c['proc']))
     faq = ''.join(f'<details><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in c['faq'])
     facts = ''.join(f'<li>{e(x)}</li>' for x in c['facts'])
-    tick = ''.join(f'<span>{e(x)}</span><i>✦</i>' for x in c['ticker'])
+    tick = ''.join(f'<span>{e(x)}</span><i></i>' for x in c['ticker'])
     nav = ''.join(f'<a href="{h}">{e(t)}</a>' for h, t in c['nav'])
     other, otherLabel, otherTitle = c['other']
     msgs = {k: c[k] for k in ('errName', 'errPhone', 'errEmail', 'errConsent', 'errSend', 'ok', 'sending', 'send')}
@@ -184,7 +184,7 @@ def page(lang):
 <link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600&family=Unbounded:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/home.css?v=VER">
 <script src="/js/home.js?v=VER" defer></script>
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
@@ -209,7 +209,7 @@ def page(lang):
     <p class="eyebrow"><span class="dot"></span>{c['eyebrow']}</p>
     <h1>{e(c['h1'])} <em>{e(c['h1em'])}</em></h1>
     <p class="lead">{e(c['lead'])}</p>
-    <div class="cta"><a class="btn" href="#work">{c['seeWork']} <span class="arr">↓</span></a><a class="btn ghost" href="#request">{c['discuss']}</a></div>
+    <div class="cta"><a class="btn" href="#work">{c['seeWork']}</a><a class="btn ghost" href="#request">{c['discuss']}</a></div>
     <ul class="facts">{facts}</ul>
   </div>
   <div class="fan" aria-hidden="true">
