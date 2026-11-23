@@ -1,7 +1,7 @@
 """Builds the Axioma home page in Russian (/) and English (/en/). Run from the axioma folder."""
 import html, json, os
 
-TG = 'https://t.me/nonexxxist'
+TG = 'https://t.me/xuriiaa'
 KEY = 'a1237403-07fb-4b6d-88e4-250b3a159863'   # Web3Forms access key, set by the owner. Do not change.
 DEMOS = 'https://rootvandal.github.io/axioma-demos/'
 
@@ -254,7 +254,7 @@ def page(lang):
 <section id="request" class="sec"><div class="wrap contact">
   <div class="head reveal">
     <p class="eyebrow">{c['cK']}</p><h2>{c['cH']}</h2><p class="sub">{e(c['cP'])}</p>
-    <div class="tgcard"><p>{c['orTg']}</p><a class="btn tg" href="{TG}" target="_blank" rel="noopener">{TGICON}<span>{c['tg']}</span></a><span class="handle">@nonexxxist</span></div>
+    <div class="tgcard"><p>{c['orTg']}</p><a class="btn tg" href="{TG}" target="_blank" rel="noopener">{TGICON}<span>{c['tg']}</span></a><span class="handle">@xuriiaa</span></div>
   </div>
   <form id="apply" class="form reveal" novalidate data-key="{KEY}" data-msgs='{e(json.dumps(msgs, ensure_ascii=False))}'>
     <label class="trap" aria-hidden="true">botcheck<input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off"></label>
