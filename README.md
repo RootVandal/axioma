@@ -1,9 +1,12 @@
 # Axioma
 
-Axioma is a website studio. This is its site: nine scenes, in English and Russian. Every scene and every note is generated in the browser with WebGL2 and the Web Audio API: no images, video or audio files.
+Website of the Axioma web studio: https://axioma.codes
 
-Open `index.html` through any static server, or see the live site.
+- `/` and `/en/` — home page (Russian and English): portfolio, services, process, FAQ and a request form.
+  Built by `python build_home.py` (run in this folder) from one template; styles in `css/home.css`, script in `js/home.js`.
+- `/space/` — the 3D version of the site (three.js), kept as a portfolio piece. Its scripts are in `space/js/`
+  and are bundled into `space/app-<hash>.js` by `python bundle.py` (run in `space/`).
+- `/privacy/`, `/en/privacy/` — privacy policy.
+- `/services/` — old address, redirects to the home page.
 
-## Application form
-
-Applications are delivered by Web3Forms. Put an access key in `data-key` on `<form id="apply">` in `index.html`. While it is empty, the form validates input but sends nothing.
+Static site on GitHub Pages, no server and no database. Requests go through Web3Forms.

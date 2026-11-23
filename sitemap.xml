@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://axioma.codes/</loc></url>
-  <url><loc>https://axioma.codes/services/</loc></url>
-  <url><loc>https://axioma.codes/en/services/</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://axioma.codes/</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://axioma.codes/"/><xhtml:link rel="alternate" hreflang="en" href="https://axioma.codes/en/"/></url>
+  <url><loc>https://axioma.codes/en/</loc><lastmod>2026-11-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://axioma.codes/"/><xhtml:link rel="alternate" hreflang="en" href="https://axioma.codes/en/"/></url>
   <url><loc>https://axioma.codes/privacy/</loc></url>
   <url><loc>https://axioma.codes/en/privacy/</loc></url>
 </urlset>

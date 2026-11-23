@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-6p13ug9Y/2TWPZMF0aIT0xv2TqxNkp62hhuZFDN2uAM='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src https://api.web3forms.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Axioma — websites people remember</title>
+<meta name="description" content="Axioma designs and builds websites people remember. Send your request and get a site made for your business.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://axioma.codes/space/">
+<meta name="robots" content="noindex">
+<meta property="og:url" content="https://axioma.codes/space/">
+<meta property="og:site_name" content="Axioma">
+<meta property="og:image" content="https://axioma.codes/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:type" content="website">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"Axioma","url":"https://axioma.codes/","description":"Website design and development studio in Almaty, working worldwide.","serviceType":"Website design and development","address":{"@type":"PostalAddress","addressLocality":"Almaty","addressCountry":"KZ"},"areaServed":"Worldwide","sameAs":["https://t.me/nonexxxist"]}</script>
+<meta property="og:title" content="Axioma">
+<meta property="og:description" content="We build websites people remember.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M7 25 16 7l9 18' fill='none' stroke='%23fff' stroke-width='2.4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Onest:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=4f3f412d42">
+<link rel="modulepreload" href="vendor/three.module.min.js">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+</head>
+<body data-shot="hero" data-tone="dark">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="-8 0 926 160"><path d="M0 150 L65 10 L130 150 M174 10 L304 150 M304 10 L174 150 M368 10 V150 M412 80 a70 70 0 1 0 140 0 a70 70 0 1 0 -140 0 M596 150 V10 L666 112 L736 10 V150 M780 150 L845 10 L910 150" fill="none" stroke="currentColor" stroke-width="13"/></symbol>
+</svg>
+
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<header id="hud">
+  <a class="brand" href="#" data-t-label="backToStart" aria-label="Axioma, back to start"><svg aria-hidden="true"><use href="#mark"/></svg></a>
+  <nav class="hud-r" aria-label="Menu">
+    <a class="menu-link" data-svc href="/en/#work"><span class="long" data-t="svc">Services and prices</span><span class="short" data-t="prices">Prices</span></a>
+    <a id="go-form" class="menu-cta" href="#request"><span class="long" data-t="request">Send a request</span><span class="short" data-t="requestShort">Request</span></a>
+    <button id="lang" type="button" data-t-label="language" aria-label="Switch language"><b data-l="en">EN</b><b data-l="ru">RU</b></button>
+    <button id="sound" type="button" aria-pressed="false" data-t-label="music" aria-label="Music"><span>Music</span><i></i></button>
+  </nav>
+</header>
+
+<main>
+  <section class="beat hero" data-in="-30" data-out="58" data-fade="12">
+    <h1 aria-label="Axioma"><svg aria-hidden="true"><use href="#mark"/></svg></h1>
+    <p class="sub" data-t="heroSub">We build websites people remember.</p>
+  </section>
+
+  <section class="beat left top" data-in="98" data-out="205" data-fade="14">
+    <p class="k" data-t="shipK">Engineering</p>
+    <h2 data-t="shipH">Your website is a machine.</h2>
+    <p class="txt" data-t="shipT">Every part does a job: pages that load fast, clean code and steady work on any device.</p>
+  </section>
+
+  <section class="beat left top" data-in="218" data-out="314" data-fade="14">
+    <p class="k" data-t="scaleK">Visibility</p>
+    <h2 data-t="scaleH">Over a billion websites. Yours gets noticed.</h2>
+    <p class="txt" data-t="scaleT">Search optimisation, speed and a memorable look set you apart from everyone else in your niche.</p>
+  </section>
+
+  <section class="beat left top" data-in="328" data-out="400" data-fade="14">
+    <p class="k" data-t="holeK">Attention</p>
+    <h2 data-t="holeH">A site people can’t pull away from.</h2>
+    <p class="txt" data-t="holeT">Gravity works online too. A strong first screen draws the visitor in and keeps them to the end.</p>
+  </section>
+
+  <section class="beat apply" data-in="498" data-out="900" data-fade="20">
+    <form id="apply" novalidate data-key="a1237403-07fb-4b6d-88e4-250b3a159863">
+      <input class="trap" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <h2 data-t="formH">Your website request</h2>
+      <div class="row">
+        <div class="field"><label for="f-name" data-t="name">Name</label><input id="f-name" name="name" type="text" autocomplete="name" maxlength="80" required><span class="err" role="alert"></span></div>
+        <div class="field"><label for="f-phone" data-t="phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="24" required><span class="err" role="alert"></span></div>
+        <div class="field"><label for="f-email" data-t="email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required><span class="err" role="alert"></span></div>
+        <div class="field wish"><label for="f-wish" data-t="wish">Wishes for your site (optional)</label><textarea id="f-wish" name="message" rows="2" maxlength="1000" autocomplete="off"></textarea></div>
+        <button type="submit"><span data-t="send">Send request</span><i>→</i></button>
+      </div>
+      <div class="field consent"><label><input type="checkbox" name="consent" required> <span data-t="consent">I agree to the processing of my personal data under the</span> <a data-privacy href="/en/privacy/" data-t="privacyLink">privacy policy</a></label><span class="err" role="alert"></span></div>
+      <p id="apply-status" class="status" role="status"></p>
+    </form>
+    <p id="after" class="after" role="status"></p>
+    <div class="links"><a class="svc-btn tg" href="https://t.me/nonexxxist" rel="noopener"><span>Telegram</span><i>→</i></a>
+    <a id="svc" class="svc-btn" data-svc href="/en/#work"><span data-t="svc">Services and prices</span><i>→</i></a></div>
+  </section>
+  <footer class="beat foot" data-in="505" data-out="900" data-fade="16">
+    <span>Axioma</span>
+    <span data-t="foot">Every scene and every note is generated in real time</span>
+  </footer>
+</main>
+
+<div class="tag3d" data-anchor="reactor" data-in="128" data-out="170"><i></i><p><b>A</b> <span data-t="tagA">Speed</span><small data-t="tagAs">Pages load without the wait</small></p></div>
+<div class="tag3d" data-anchor="habitat" data-in="150" data-out="190"><i></i><p><b>B</b> <span data-t="tagB">Adaptive</span><small data-t="tagBs">Phone, tablet, desktop</small></p></div>
+<div class="tag3d" data-anchor="dish" data-in="172" data-out="207"><i></i><p><b>C</b> <span data-t="tagC">SEO</span><small data-t="tagCs">Search brings clients to you</small></p></div>
+<div class="tag3d" data-anchor="here" data-shot="scale" data-in="262" data-out="316"><i></i><p><b>◦</b> <span data-t="tagH">Your website</span><small data-t="tagHs">One in a billion</small></p></div>
+
+<div id="card" aria-hidden="true"><span></span></div>
+<div id="nudge" aria-hidden="true"><span data-t="nudge">Scroll down</span><i></i></div>
+<div id="scroll" aria-hidden="true"></div>
+<noscript><p class="msg">This site needs JavaScript and WebGL2.</p></noscript>
+<p class="msg nogl-msg" data-t="noGl">This browser can’t run WebGL2, which Axioma needs. Try a different browser.</p>
+<script type="module" src="app-4f3f412d42.js"></script>
+</body>
+</html>
